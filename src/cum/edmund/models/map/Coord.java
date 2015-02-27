@@ -1,4 +1,4 @@
-package cum.edmund.map;
+package cum.edmund.models.map;
 
 /**
  * Shitty model to represent a point on the map

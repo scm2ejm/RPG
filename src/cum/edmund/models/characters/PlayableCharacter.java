@@ -1,4 +1,4 @@
-package cum.edmund.characters;
+package cum.edmund.models.characters;
 
 public interface PlayableCharacter {
   

@@ -4,8 +4,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cum.edmund.characters.helpers.CombatHelper;
-import cum.edmund.characters.helpers.CombatHelper.CombatOutcome;
+import cum.edmund.models.characters.FightableCharacter;
+import cum.edmund.models.characters.enemies.ButtasaurusAss;
+import cum.edmund.models.characters.helpers.CombatHelper;
+import cum.edmund.models.characters.helpers.CombatHelper.CombatOutcome;
+import cum.edmund.models.characters.hero.Hero;
 
 public class HeroTest {
 
@@ -18,8 +21,8 @@ public class HeroTest {
   @Test
   public void testDeath() {
 
-    FightableCharacter hero = new Hero("fucker", 9999);
-    FightableCharacter monster = new ButtasaurusAss();
+    FightableCharacter hero = new Hero("fucker", 9999, 0, 0);
+    FightableCharacter monster = new ButtasaurusAss(0, 1);
 
     while (true) {
       LOGGER.debug("{} attacks {}", hero.getName(), monster.getName());

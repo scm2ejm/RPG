@@ -1,4 +1,4 @@
-package cum.edmund.map;
+package cum.edmund.models.map;
 
 import java.util.HashMap;
 import java.util.Map;

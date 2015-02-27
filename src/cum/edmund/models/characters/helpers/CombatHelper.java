@@ -1,10 +1,9 @@
-package cum.edmund.characters.helpers;
+package cum.edmund.models.characters.helpers;
 
 import java.util.Random;
 
-import cum.edmund.characters.CombatAttributes;
-import cum.edmund.characters.CombatAttributes.Attribute;
-import cum.edmund.characters.FightableCharacter;
+import cum.edmund.models.characters.CharacterAttributes;
+import cum.edmund.models.characters.FightableCharacter;
 
 public class CombatHelper {
 
@@ -28,11 +27,11 @@ public class CombatHelper {
 
   public static CombatOutcome physicalAttack(FightableCharacter attacker,
       FightableCharacter defender) {
-    CombatAttributes attackerAttrs = attacker.getCombatAttributes();
-    CombatAttributes defenderAttrs = defender.getCombatAttributes();
+    CharacterAttributes attackerAttrs = attacker.getCharacterAttributes();
+    CharacterAttributes defenderAttrs = defender.getCharacterAttributes();
 
-    int attack = attackerAttrs.get(Attribute.PHYSICAL_STRENGTH);
-    int defense = defenderAttrs.get(Attribute.PHYSICAL_DEFENSE);
+    int attack = attackerAttrs.getPhysicalStrength();
+    int defense = defenderAttrs.getPhysicalDefense();
 
     boolean strongAttack = random.nextBoolean();
     boolean strongDefence = random.nextBoolean();
