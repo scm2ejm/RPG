@@ -18,12 +18,10 @@ public class Hero extends FightableCharacter implements PlayableCharacter {
 
   public Hero(String name, int x, int y) {
     super(name, WorldObjectType.HERO, new Coord(x, y));
-
-    CharacterAttributes attributes = buildDefaultAttributes();
-    setCharacterAttributes(attributes);
   }
 
-  private CharacterAttributes buildDefaultAttributes() {
+  @Override
+  protected void buildCharacterAttributes() {
     CharacterAttributes characterAttributes = new CharacterAttributes();
 
     characterAttributes.setPhysicalStrength(DEFAULT_PHYSICAL_STRENGTH);
@@ -36,6 +34,6 @@ public class Hero extends FightableCharacter implements PlayableCharacter {
     characterAttributes.setMaxHp(DEFAULT_HP);
     characterAttributes.setMaxMp(DEFAULT_MP);
 
-    return characterAttributes;
+    setCharacterAttributes(characterAttributes);
   }
 }
