@@ -1,7 +1,8 @@
 package cum.edmund.models.map;
 
 /**
- * Shitty model to represent a point on the map
+ * Shitty model to represent a point on the map. Modified from
+ * http://stackoverflow.com/questions/2050490/what-collection-to-use-instead-of-2d-array-in-java
  * 
  * @author Ed
  *
@@ -13,6 +14,14 @@ public class Coord {
   public Coord(int x, int y) {
     this.x = x;
     this.y = y;
+  }
+
+  public int getX() {
+    return x;
+  }
+
+  public int getY() {
+    return y;
   }
 
   @Override
@@ -29,4 +38,8 @@ public class Coord {
     return ((x * 199) + (y * 151) * 419);
   }
 
+  @Override
+  public String toString() {
+    return "(" + x + "," + y + ")";
+  }
 }

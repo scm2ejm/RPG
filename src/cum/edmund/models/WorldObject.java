@@ -38,4 +38,5 @@ public abstract class WorldObject {
   public String getName() {
     return name;
   }
+  
 }

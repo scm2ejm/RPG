@@ -16,7 +16,7 @@ public class Hero extends FightableCharacter implements PlayableCharacter {
   private int DEFAULT_HP = 100;
   private int DEFAULT_MP = 0;
 
-  public Hero(String name, int startingHealth, int x, int y) {
+  public Hero(String name, int x, int y) {
     super(name, WorldObjectType.HERO, new Coord(x, y));
 
     CharacterAttributes attributes = buildDefaultAttributes();

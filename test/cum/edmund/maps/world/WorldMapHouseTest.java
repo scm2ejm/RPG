@@ -9,11 +9,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import cum.edmund.models.WorldObject;
 import cum.edmund.models.WorldObjectType;
 import cum.edmund.models.house.House;
 import cum.edmund.models.map.Coord;
 import cum.edmund.models.maps.world.WorldMap;
+import cum.edmund.models.maps.world.WorldMapElement;
 
 public class WorldMapHouseTest {
 
@@ -30,16 +30,16 @@ public class WorldMapHouseTest {
     WorldMap map = new WorldMap();
 
     // Create a test house
-    WorldObject house = new House("fucker's house", new Coord(5, 0));
+    House house = new House("fucker's house", new Coord(5, 0));
 
     // Place the house on the map
-    map.put(house);
+    map.putHouse(house);
 
     // Create a test house
-    WorldObject crackDen = new House("fucker's crack den", new Coord(69, -69));
+    House crackDen = new House("fucker's crack den", new Coord(69, -69));
 
     // Place the crack den on the map
-    map.put(crackDen);
+    map.putHouse(crackDen);
 
     // Scan map looking for house and crack den
     boolean foundHouse = false;
@@ -47,13 +47,13 @@ public class WorldMapHouseTest {
     for (int x = -100; x <= 100; x++) {
       for (int y = -100; y <= 100; y++) {
 
-        WorldObject object = map.get(x, y);
+        WorldMapElement element = map.get(x, y);
 
-        String identifiedObject = verifyAndIdentifyFeature(x, y, object);
+        String houseName = verifyAndIdentifyHouse(x, y, element);
 
-        if ("fucker's house".equals(identifiedObject)) {
+        if ("fucker's house".equals(houseName)) {
           foundHouse = true;
-        } else if ("fucker's crack den".equals(identifiedObject)) {
+        } else if ("fucker's crack den".equals(houseName)) {
           foundCrackDen = true;
         }
       }
@@ -64,32 +64,36 @@ public class WorldMapHouseTest {
 
   }
 
-  private String verifyAndIdentifyFeature(int x, int y, WorldObject object) {
+  private String verifyAndIdentifyHouse(int x, int y, WorldMapElement element) {
     if (x == 5 && y == 0) {
 
       // There should be fucker's house here
 
-      assertNotNull(object);
-      assertEquals("fucker's house", object.getName());
-      assertEquals(WorldObjectType.HOUSE, object.getType());
-      LOGGER.debug("({},{}) - Found {}", x, y, object.getName());
-      return object.getName();
+      House house = element.getHouse();
+
+      assertNotNull(element);
+      assertEquals("fucker's house", house.getName());
+      assertEquals(WorldObjectType.HOUSE, house.getType());
+      LOGGER.debug("({},{}) - Found {}", x, y, house.getName());
+      return house.getName();
 
     } else if (x == 69 && y == -69) {
 
       // There should be fucker's crack den here
 
-      assertNotNull(object);
-      assertEquals("fucker's crack den", object.getName());
-      assertEquals(WorldObjectType.HOUSE, object.getType());
-      LOGGER.debug("({},{}) - Found {}", x, y, object.getName());
-      return object.getName();
+      House house = element.getHouse();
+
+      assertNotNull(element);
+      assertEquals("fucker's crack den", house.getName());
+      assertEquals(WorldObjectType.HOUSE, house.getType());
+      LOGGER.debug("({},{}) - Found {}", x, y, house.getName());
+      return house.getName();
 
     } else {
 
       // Anything else should be null
 
-      assertNull(object);
+      assertNull(element);
       return null;
 
     }
