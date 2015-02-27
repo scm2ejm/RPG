@@ -15,13 +15,10 @@ public class ButtasaurusAss extends FightableNPC {
 
   public ButtasaurusAss(int x, int y) {
     super("Buttasaurus Ass", new Coord(x, y));
-    
-    CharacterAttributes attributes = buildDefaultAttributes();
-    setCharacterAttributes(attributes);
-
   }
 
-  private CharacterAttributes buildDefaultAttributes() {
+  @Override
+  protected void buildCharacterAttributes() {
     CharacterAttributes characterAttributes = new CharacterAttributes();
 
     characterAttributes.setPhysicalStrength(DEFAULT_PHYSICAL_STRENGTH);
@@ -34,6 +31,6 @@ public class ButtasaurusAss extends FightableNPC {
     characterAttributes.setMaxHp(DEFAULT_HP);
     characterAttributes.setMaxMp(DEFAULT_MP);
 
-    return characterAttributes;
+    setCharacterAttributes(characterAttributes);
   }
 }

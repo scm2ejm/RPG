@@ -24,9 +24,14 @@ public abstract class FightableCharacter extends Character {
     return characterAttributes;
   }
 
-  protected void setCharacterAttributes(CharacterAttributes characterAttributes) {
+  public void setCharacterAttributes(CharacterAttributes characterAttributes) {
     this.characterAttributes = characterAttributes;
   }
+
+  /**
+   * This is used for setting initial values for this character
+   */
+  protected abstract void buildCharacterAttributes();
 
   public void takeDamage(int damage) {
 
