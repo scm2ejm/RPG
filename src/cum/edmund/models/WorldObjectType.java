@@ -1,4 +1,4 @@
-package cum.edmund.map;
+package cum.edmund.models;
 
 /**
  * Enum for type of things you may find on a map. Maybe houses, the player, items, etc
@@ -6,6 +6,11 @@ package cum.edmund.map;
  * @author Ed
  *
  */
-public enum MapFeatureType {
-  HOUSE
+public enum WorldObjectType {
+  HOUSE,
+  
+  HERO,
+  
+  ENEMY,
+  
 }
