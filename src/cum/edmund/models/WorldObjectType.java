@@ -8,9 +8,11 @@ package cum.edmund.models;
  */
 public enum WorldObjectType {
   HOUSE,
-  
+
   HERO,
-  
+
   ENEMY,
-  
+
+  BARRIER,
+
 }

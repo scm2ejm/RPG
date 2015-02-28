@@ -8,13 +8,13 @@ import cum.edmund.models.map.Coord;
 
 public class Hero extends FightableCharacter implements PlayableCharacter {
 
-  private int DEFAULT_PHYSICAL_STRENGTH = 50;
-  private int DEFAULT_MAGICAL_STRENGTH = 30;
-  private int DEFAULT_PHYSICAL_DEFENSE = 25;
-  private int DEFAULT_MAGICAL_DEFENCE = 10;
-  private int DEFAULT_AGILITY = 25;
-  private int DEFAULT_HP = 100;
-  private int DEFAULT_MP = 0;
+  private static final int DEFAULT_PHYSICAL_STRENGTH = 50;
+  private static final int DEFAULT_MAGICAL_STRENGTH = 30;
+  private static final int DEFAULT_PHYSICAL_DEFENSE = 25;
+  private static final int DEFAULT_MAGICAL_DEFENCE = 10;
+  private static final int DEFAULT_AGILITY = 25;
+  private static final int DEFAULT_HP = 100;
+  private static final int DEFAULT_MP = 0;
 
   public Hero(String name, int x, int y) {
     super(name, WorldObjectType.HERO, new Coord(x, y));

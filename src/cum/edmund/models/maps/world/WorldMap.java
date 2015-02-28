@@ -3,10 +3,10 @@ package cum.edmund.models.maps.world;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cum.edmund.models.blocks.Barrier;
 import cum.edmund.models.characters.Character;
 import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.FightableNPC;
-import cum.edmund.models.house.House;
 import cum.edmund.models.map.Coord;
 import cum.edmund.models.map.SparseMatrix;
 
@@ -43,20 +43,20 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
 
   }
 
-  public void putHouse(House house) {
-    WorldMapElement element = get(house.getPosition());
+  public void putBarrier(Barrier barrier) {
+    WorldMapElement element = get(barrier.getPosition());
 
     // Create element if it doesn't already exist
     if (element == null) {
       element = new WorldMapElement();
-      put(house.getPosition(), element);
+      put(barrier.getPosition(), element);
     }
 
-    if (element.getHouse() != null) {
-      LOGGER.warn("Overriding house at {}", house.getPosition());
+    if (element.getBarrier() != null) {
+      LOGGER.warn("Overriding barrier at {}", barrier.getPosition());
     }
 
-    element.setHouse(house);
+    element.setBarrier(barrier);
   }
 
   /**
@@ -76,7 +76,7 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     if (adjacentElement == null) {
       success = true;
     } else {
-      success = adjacentElement.getHouse() == null;
+      success = adjacentElement.getBarrier() == null;
     }
 
     if (success) {

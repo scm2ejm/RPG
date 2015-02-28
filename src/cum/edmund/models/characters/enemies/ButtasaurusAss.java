@@ -5,13 +5,13 @@ import cum.edmund.models.map.Coord;
 
 public class ButtasaurusAss extends FightableNPC {
 
-  private int DEFAULT_PHYSICAL_STRENGTH = 50;
-  private int DEFAULT_MAGICAL_STRENGTH = 30;
-  private int DEFAULT_PHYSICAL_DEFENSE = 10;
-  private int DEFAULT_MAGICAL_DEFENCE = 10;
-  private int DEFAULT_AGILITY = 25;
-  private int DEFAULT_HP = 50;
-  private int DEFAULT_MP = 0;
+  private static final int DEFAULT_PHYSICAL_STRENGTH = 50;
+  private static final int DEFAULT_MAGICAL_STRENGTH = 30;
+  private static final int DEFAULT_PHYSICAL_DEFENSE = 10;
+  private static final int DEFAULT_MAGICAL_DEFENCE = 10;
+  private static final int DEFAULT_AGILITY = 25;
+  private static final int DEFAULT_HP = 50;
+  private static final int DEFAULT_MP = 0;
 
   public ButtasaurusAss(int x, int y) {
     super("Buttasaurus Ass", new Coord(x, y));

@@ -1,6 +1,5 @@
-package cum.edmund.models.house;
+package cum.edmund.models.blocks;
 
-import cum.edmund.models.WorldObject;
 import cum.edmund.models.WorldObjectType;
 import cum.edmund.models.map.Coord;
 
@@ -10,7 +9,7 @@ import cum.edmund.models.map.Coord;
  * @author Ed
  *
  */
-public class House extends WorldObject {
+public class House extends Barrier {
 
   public House(String name, Coord position) {
     super(name, WorldObjectType.HOUSE, position);
