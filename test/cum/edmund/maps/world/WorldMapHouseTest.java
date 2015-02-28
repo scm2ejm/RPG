@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cum.edmund.models.WorldObjectType;
-import cum.edmund.models.house.House;
+import cum.edmund.models.blocks.House;
 import cum.edmund.models.map.Coord;
 import cum.edmund.models.maps.world.WorldMap;
 import cum.edmund.models.maps.world.WorldMapElement;
@@ -33,13 +33,13 @@ public class WorldMapHouseTest {
     House house = new House("fucker's house", new Coord(5, 0));
 
     // Place the house on the map
-    map.putHouse(house);
+    map.putBarrier(house);
 
     // Create a test house
     House crackDen = new House("fucker's crack den", new Coord(69, -69));
 
     // Place the crack den on the map
-    map.putHouse(crackDen);
+    map.putBarrier(crackDen);
 
     // Scan map looking for house and crack den
     boolean foundHouse = false;

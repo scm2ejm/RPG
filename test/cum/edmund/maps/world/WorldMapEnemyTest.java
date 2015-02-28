@@ -39,11 +39,11 @@ public class WorldMapEnemyTest {
 
     element = map.get(5, 5);
     assertEquals(2, element.getEnemies().size());
-    assertNull(element.getHouse());
+    assertNull(element.getBarrier());
 
     element = map.get(10, 10);
     assertEquals(1, element.getEnemies().size());
-    assertNull(element.getHouse());
+    assertNull(element.getBarrier());
 
   }
 

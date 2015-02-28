@@ -18,6 +18,8 @@ public abstract class FightableCharacter extends Character {
 
   public FightableCharacter(String name, WorldObjectType type, Coord position) {
     super(name, type, position);
+
+    buildCharacterAttributes();
   }
 
   public CharacterAttributes getCharacterAttributes() {

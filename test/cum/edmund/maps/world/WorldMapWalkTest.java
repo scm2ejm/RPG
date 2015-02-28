@@ -6,11 +6,11 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import cum.edmund.models.blocks.House;
 import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.ButtasaurusAss;
 import cum.edmund.models.characters.enemies.FightableNPC;
 import cum.edmund.models.characters.hero.Hero;
-import cum.edmund.models.house.House;
 import cum.edmund.models.map.Coord;
 import cum.edmund.models.maps.world.WalkOutcome;
 import cum.edmund.models.maps.world.WorldMap;
@@ -23,7 +23,7 @@ public class WorldMapWalkTest {
     WorldMap map = new WorldMap();
 
     House house = new House("fucker's house", new Coord(-2, 0));
-    map.putHouse(house);
+    map.putBarrier(house);
 
     Hero fucker = new Hero("fucker", 0, 0);
 

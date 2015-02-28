@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import cum.edmund.models.blocks.Barrier;
+import cum.edmund.models.blocks.House;
 import cum.edmund.models.characters.enemies.FightableNPC;
-import cum.edmund.models.house.House;
 
 /**
  * Model represents the objects contained within a point on the map. They may be many enemies and/or
@@ -18,7 +19,7 @@ public class WorldMapElement {
 
   private List<FightableNPC> enemies = Collections.synchronizedList(new ArrayList<>());
 
-  private House house;
+  private Barrier barrier;
 
   public List<FightableNPC> getEnemies() {
     return enemies;
@@ -29,11 +30,15 @@ public class WorldMapElement {
   }
 
   public House getHouse() {
-    return house;
+    return (House) barrier;
   }
 
-  public void setHouse(House house) {
-    this.house = house;
+  public Barrier getBarrier() {
+    return barrier;
+  }
+
+  public void setBarrier(Barrier barrier) {
+    this.barrier = barrier;
   }
 
 }
