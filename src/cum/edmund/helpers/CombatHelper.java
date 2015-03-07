@@ -1,4 +1,4 @@
-package cum.edmund.models.characters.helpers;
+package cum.edmund.helpers;
 
 import java.util.Random;
 

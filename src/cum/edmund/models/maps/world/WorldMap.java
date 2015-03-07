@@ -4,10 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cum.edmund.models.blocks.Barrier;
-import cum.edmund.models.characters.Character;
-import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.FightableNPC;
-import cum.edmund.models.map.Coord;
 import cum.edmund.models.map.SparseMatrix;
 
 /**
@@ -58,69 +55,4 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
 
     element.setBarrier(barrier);
   }
-
-  /**
-   * Makes the character walk in a direct
-   * 
-   * @param direction
-   * @return true if successful, false if unable to walk in that direction
-   */
-  public WalkOutcome walk(Character character, Direction direction) {
-    Coord oldPosition = character.getPosition();
-    Coord newPosition = adjacentPosition(oldPosition, direction);
-
-    WorldMapElement adjacentElement = get(newPosition);
-
-    boolean success;
-
-    if (adjacentElement == null) {
-      success = true;
-    } else {
-      success = adjacentElement.getBarrier() == null;
-    }
-
-    if (success) {
-      character.setPosition(newPosition);
-      LOGGER.debug("{} walks {}. New position is {}", character.getName(), direction, newPosition);
-    } else {
-      newPosition = oldPosition;
-      LOGGER.debug("{} cannot walk {}, the path is blocked. New position is {}",
-          character.getName(), direction, newPosition);
-    }
-
-    int enemyCount = adjacentElement == null ? 0 : adjacentElement.getEnemies().size();
-    if (enemyCount > 0) {
-      LOGGER.debug("{} has to fight {} enemies!", character.getName(), enemyCount);
-    }
-
-    return new WalkOutcome(success, enemyCount > 0, newPosition, adjacentElement);
-  }
-
-  private Coord adjacentPosition(Coord position, Direction direction) {
-
-    int x = position.getX();
-    int y = position.getY();
-
-    switch (direction) {
-      case EAST:
-        return new Coord(x + 1, y);
-      case NORTH:
-        return new Coord(x, y + 1);
-      case NORTH_EAST:
-        return new Coord(x + 1, y + 1);
-      case NORTH_WEST:
-        return new Coord(x - 1, y + 1);
-      case SOUTH:
-        return new Coord(x, y - 1);
-      case SOUTH_EAST:
-        return new Coord(x + 1, y - 1);
-      case SOUTH_WEST:
-        return new Coord(x - 1, y - 1);
-      case WEST:
-        return new Coord(x - 1, y);
-      default:
-        throw new RuntimeException("Dafuq is " + direction);
-    }
-  }
-
 }

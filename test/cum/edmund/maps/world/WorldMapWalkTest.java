@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import cum.edmund.helpers.WalkHelper;
 import cum.edmund.models.blocks.House;
 import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.ButtasaurusAss;
@@ -28,14 +29,14 @@ public class WorldMapWalkTest {
     Hero fucker = new Hero("fucker", 0, 0);
 
     // this should work
-    WalkOutcome outcome = map.walk(fucker, Direction.WEST);
+    WalkOutcome outcome = WalkHelper.walk(fucker, Direction.WEST, map);
     assertTrue(outcome.isSuccess());
     assertFalse(outcome.isFight());
     assertEquals(new Coord(-1, 0), outcome.getNewPosition());
     assertEquals(new Coord(-1, 0), fucker.getPosition());
 
     // this should fail (house in way)
-    outcome = map.walk(fucker, Direction.WEST);
+    outcome = WalkHelper.walk(fucker, Direction.WEST, map);
     assertFalse(outcome.isSuccess());
     assertFalse(outcome.isFight());
     assertEquals(new Coord(-1, 0), outcome.getNewPosition());
@@ -57,21 +58,21 @@ public class WorldMapWalkTest {
     Hero fucker = new Hero("fucker", 0, 0);
 
     // This should work
-    WalkOutcome outcome = map.walk(fucker, Direction.EAST);
+    WalkOutcome outcome = WalkHelper.walk(fucker, Direction.EAST, map);
     assertTrue(outcome.isSuccess());
     assertFalse(outcome.isFight());
     assertEquals(new Coord(1, 0), outcome.getNewPosition());
     assertEquals(new Coord(1, 0), fucker.getPosition());
 
     // This should work
-    outcome = map.walk(fucker, Direction.EAST);
+    outcome = WalkHelper.walk(fucker, Direction.EAST, map);
     assertTrue(outcome.isSuccess());
     assertFalse(outcome.isFight());
     assertEquals(new Coord(2, 0), outcome.getNewPosition());
     assertEquals(new Coord(2, 0), fucker.getPosition());
 
     // This should work, results in fight!
-    outcome = map.walk(fucker, Direction.EAST);
+    outcome = WalkHelper.walk(fucker, Direction.EAST, map);
     assertTrue(outcome.isSuccess());
     assertTrue(outcome.isFight());
     assertEquals(new Coord(3, 0), outcome.getNewPosition());
