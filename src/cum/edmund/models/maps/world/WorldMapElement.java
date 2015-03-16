@@ -1,12 +1,8 @@
 package cum.edmund.models.maps.world;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import cum.edmund.models.blocks.Barrier;
 import cum.edmund.models.blocks.House;
-import cum.edmund.models.characters.enemies.FightableNPC;
+import cum.edmund.models.characters.enemies.Enemies;
 
 /**
  * Model represents the objects contained within a point on the map. They may be many enemies and/or
@@ -17,20 +13,22 @@ import cum.edmund.models.characters.enemies.FightableNPC;
  */
 public class WorldMapElement {
 
-  private List<FightableNPC> enemies = Collections.synchronizedList(new ArrayList<>());
-
   private Barrier barrier;
 
-  public List<FightableNPC> getEnemies() {
-    return enemies;
-  }
-
-  public void setEnemies(List<FightableNPC> enemies) {
-    this.enemies = enemies;
-  }
-
   public House getHouse() {
-    return (House) barrier;
+    if (barrier instanceof House) {
+      return (House) barrier;
+    } else {
+      return null;
+    }
+  }
+
+  public Enemies getEnemies() {
+    if (barrier instanceof Enemies) {
+      return (Enemies) barrier;
+    } else {
+      return null;
+    }
   }
 
   public Barrier getBarrier() {

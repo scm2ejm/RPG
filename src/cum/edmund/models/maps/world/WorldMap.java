@@ -4,10 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cum.edmund.models.blocks.Barrier;
-import cum.edmund.models.characters.Character;
-import cum.edmund.models.characters.Direction;
-import cum.edmund.models.characters.enemies.FightableNPC;
-import cum.edmund.models.map.Coord;
+import cum.edmund.models.blocks.House;
+import cum.edmund.models.characters.enemies.Enemies;
+import cum.edmund.models.characters.hero.Hero;
 import cum.edmund.models.map.SparseMatrix;
 
 /**
@@ -21,29 +20,17 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
 
   private static final Logger LOGGER;
 
+  private Hero fucker;
+
   static {
     LOGGER = LoggerFactory.getLogger(WorldMap.class);
   }
 
-  public void putEnemy(FightableNPC enemy) {
-    WorldMapElement element = get(enemy.getPosition());
-
-    // Create element if it doesn't already exist
-    if (element == null) {
-      element = new WorldMapElement();
-      put(enemy.getPosition(), element);
-    }
-
-    element.getEnemies().add(enemy);
-
-    // Can't have more than 6 enemies in an element
-    if (element.getEnemies().size() > 6) {
-      throw new RuntimeException("Cannot fit more enemies in " + enemy.getPosition());
-    }
-
+  public WorldMap(Hero fucker) {
+    this.fucker = fucker;
   }
 
-  public void putBarrier(Barrier barrier) {
+  public void put(Barrier barrier) {
     WorldMapElement element = get(barrier.getPosition());
 
     // Create element if it doesn't already exist
@@ -59,68 +46,44 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     element.setBarrier(barrier);
   }
 
-  /**
-   * Makes the character walk in a direct
-   * 
-   * @param direction
-   * @return true if successful, false if unable to walk in that direction
-   */
-  public WalkOutcome walk(Character character, Direction direction) {
-    Coord oldPosition = character.getPosition();
-    Coord newPosition = adjacentPosition(oldPosition, direction);
+  @Override
+  public String toString() {
 
-    WorldMapElement adjacentElement = get(newPosition);
+    int xCentre = fucker.getPosition().getX();
+    int yCentre = fucker.getPosition().getY();
 
-    boolean success;
+    StringBuilder sb = new StringBuilder();
 
-    if (adjacentElement == null) {
-      success = true;
-    } else {
-      success = adjacentElement.getBarrier() == null;
+    sb.append("--------");
+
+    for (int yOffset = 5; yOffset >= -5; yOffset--) {
+
+      int yCurrent = yCentre + yOffset;
+
+      for (int xOffset = -5; xOffset <= 5; xOffset++) {
+
+        int xCurrent = xCentre + xOffset;
+
+        WorldMapElement element = get(xCurrent, yCurrent);
+
+        if (xOffset == 0 && yOffset == 0) {
+          sb.append("X");
+        } else if (element == null) {
+          sb.append(".");
+        } else if (element.getBarrier() instanceof House) {
+          sb.append("H");
+        } else if (element.getBarrier() instanceof Enemies) {
+          sb.append("E");
+        } else {
+          sb.append("?");
+        }
+      }
+
+      sb.append("\n");
     }
 
-    if (success) {
-      character.setPosition(newPosition);
-      LOGGER.debug("{} walks {}. New position is {}", character.getName(), direction, newPosition);
-    } else {
-      newPosition = oldPosition;
-      LOGGER.debug("{} cannot walk {}, the path is blocked. New position is {}",
-          character.getName(), direction, newPosition);
-    }
+    sb.append("--------");
 
-    int enemyCount = adjacentElement == null ? 0 : adjacentElement.getEnemies().size();
-    if (enemyCount > 0) {
-      LOGGER.debug("{} has to fight {} enemies!", character.getName(), enemyCount);
-    }
-
-    return new WalkOutcome(success, enemyCount > 0, newPosition, adjacentElement);
+    return sb.toString();
   }
-
-  private Coord adjacentPosition(Coord position, Direction direction) {
-
-    int x = position.getX();
-    int y = position.getY();
-
-    switch (direction) {
-      case EAST:
-        return new Coord(x + 1, y);
-      case NORTH:
-        return new Coord(x, y + 1);
-      case NORTH_EAST:
-        return new Coord(x + 1, y + 1);
-      case NORTH_WEST:
-        return new Coord(x - 1, y + 1);
-      case SOUTH:
-        return new Coord(x, y - 1);
-      case SOUTH_EAST:
-        return new Coord(x + 1, y - 1);
-      case SOUTH_WEST:
-        return new Coord(x - 1, y - 1);
-      case WEST:
-        return new Coord(x - 1, y);
-      default:
-        throw new RuntimeException("Dafuq is " + direction);
-    }
-  }
-
 }

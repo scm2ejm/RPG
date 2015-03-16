@@ -17,6 +17,10 @@ public class ButtasaurusAss extends FightableNPC {
     super("Buttasaurus Ass", new Coord(x, y));
   }
 
+  public ButtasaurusAss(Coord position) {
+    super("Buttasaurus Ass", position);
+  }
+
   @Override
   protected void buildCharacterAttributes() {
     CharacterAttributes characterAttributes = new CharacterAttributes();

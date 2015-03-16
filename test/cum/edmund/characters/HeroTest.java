@@ -4,10 +4,10 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cum.edmund.helpers.CombatHelper;
+import cum.edmund.helpers.CombatHelper.CombatOutcome;
 import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.models.characters.enemies.ButtasaurusAss;
-import cum.edmund.models.characters.helpers.CombatHelper;
-import cum.edmund.models.characters.helpers.CombatHelper.CombatOutcome;
 import cum.edmund.models.characters.hero.Hero;
 
 public class HeroTest {

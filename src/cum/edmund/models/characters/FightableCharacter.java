@@ -51,7 +51,7 @@ public abstract class FightableCharacter extends Character {
 
     int hp = characterAttributes.getHp();
 
-    boolean isAlive = hp >= 0;
+    boolean isAlive = hp > 0;
 
     if (!isAlive) {
       LOGGER.debug("{} is dead", getName());
@@ -60,4 +60,9 @@ public abstract class FightableCharacter extends Character {
     return isAlive;
   }
 
+  public void kill() {
+    int oldHp = characterAttributes.getHp();
+
+    takeDamage(oldHp);
+  }
 }
