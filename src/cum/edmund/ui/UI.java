@@ -11,9 +11,12 @@ import javax.swing.JPanel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cum.edmund.helpers.EnemiesHelper;
 import cum.edmund.helpers.WalkHelper;
+import cum.edmund.models.blocks.House;
 import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.hero.Hero;
+import cum.edmund.models.map.Coord;
 import cum.edmund.models.maps.world.WalkOutcome;
 import cum.edmund.models.maps.world.WorldMap;
 
@@ -32,12 +35,17 @@ public class UI extends JPanel {
 
   public UI() {
     keysPressed = ConcurrentHashMap.newKeySet();
-    worldMap = new WorldMap();
     fucker = new Hero("fucker", 0, 0);
+    worldMap = new WorldMap(fucker);
 
     KeyListener listener = new MyKeyListener();
     addKeyListener(listener);
     setFocusable(true);
+
+    // TODO REMOVE THESE TEST OBJECTS
+    worldMap.put(new House("Fuckers house", new Coord(4, 2)));
+    worldMap.put(EnemiesHelper.createButtasaurusAss(4, new Coord(-2, -2)));
+
   }
 
   public static void main(String[] args) {
@@ -68,7 +76,7 @@ public class UI extends JPanel {
 
       processOtherKeys();
     }
-    
+
     private void processOtherKeys() {
       // TODO Auto-generated method stub
     }
@@ -95,6 +103,8 @@ public class UI extends JPanel {
       }
 
       WalkOutcome outcome = WalkHelper.walk(fucker, direction, worldMap);
+
+      LOGGER.debug(worldMap.toString());
 
       if (outcome.isFight()) {
         LOGGER.debug("Starting fight!");

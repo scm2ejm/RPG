@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import cum.edmund.models.characters.Character;
 import cum.edmund.models.characters.Direction;
+import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.map.Coord;
 import cum.edmund.models.maps.world.WalkOutcome;
 import cum.edmund.models.maps.world.WorldMap;
@@ -47,12 +48,38 @@ public class WalkHelper {
           character.getName(), direction, newPosition);
     }
 
-    int enemyCount = adjacentElement == null ? 0 : adjacentElement.getEnemies().size();
-    if (enemyCount > 0) {
-      LOGGER.debug("{} has to fight {} enemies!", character.getName(), enemyCount);
+    Enemies enemies = closeEnemies(character, map);
+
+    return new WalkOutcome(success, enemies, newPosition, adjacentElement);
+  }
+
+  /**
+   * Used to look for enemies in immediate area
+   */
+  private static Enemies closeEnemies(Character fucker, WorldMap map) {
+
+    int xCentre = fucker.getPosition().getX();
+    int yCentre = fucker.getPosition().getY();
+
+    for (int yOffset = 1; yOffset >= -1; yOffset--) {
+
+      int yCurrent = yCentre + yOffset;
+
+      for (int xOffset = -1; xOffset <= 1; xOffset++) {
+
+        int xCurrent = xCentre + xOffset;
+
+        WorldMapElement element = map.get(xCurrent, yCurrent);
+
+        if (element != null && element.getEnemies() != null) {
+          // Found adjacent enemies
+          return element.getEnemies();
+        }
+      }
+
     }
 
-    return new WalkOutcome(success, enemyCount > 0, newPosition, adjacentElement);
+    return null;
   }
 
   private static Coord adjacentPosition(Coord position, Direction direction) {

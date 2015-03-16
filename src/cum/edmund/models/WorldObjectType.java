@@ -13,6 +13,8 @@ public enum WorldObjectType {
 
   ENEMY,
 
-  BARRIER,
+  ENEMIES,
+
+  BARRIER
 
 }
