@@ -6,7 +6,8 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,26 +22,48 @@ import cum.edmund.models.maps.world.WalkOutcome;
 import cum.edmund.models.maps.world.WorldMap;
 
 @SuppressWarnings("serial")
-public class UI extends JPanel {
+public class UI extends JFrame {
 
   private static final Logger LOGGER;
 
   private Set<Integer> keysPressed;
   private WorldMap worldMap;
   private Hero fucker;
+  private DefaultTableModel model;
 
   static {
     LOGGER = LoggerFactory.getLogger(UI.class);
   }
 
   public UI() {
+    super("Return to AssFuck Castle");
+    setSize(200, 200);
+    setVisible(true);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    String[] columnNames = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+
+    Object[][] data = new Object[11][11];
+
+    model = new DefaultTableModel(data, columnNames);
+
+    JTable table = new AssFuckGrid(model);
+    table.setPreferredScrollableViewportSize(table.getPreferredSize());
+    table.setTableHeader(null);
+    getContentPane().add(table);
+
+    // Set table resizer
+    table.getParent().addComponentListener(new AssFuckTableResizer(table));
+
     keysPressed = ConcurrentHashMap.newKeySet();
     fucker = new Hero("fucker", 0, 0);
     worldMap = new WorldMap(fucker);
+    model.setDataVector(worldMap.toArray(), columnNames);
 
     KeyListener listener = new MyKeyListener();
     addKeyListener(listener);
     setFocusable(true);
+    table.setEnabled(false);
 
     // TODO REMOVE THESE TEST OBJECTS
     worldMap.put(new House("Fuckers house", new Coord(4, 2)));
@@ -49,12 +72,7 @@ public class UI extends JPanel {
   }
 
   public static void main(String[] args) {
-    JFrame frame = new JFrame("Return to AssFuck Castle");
-    UI ui = new UI();
-    frame.add(ui);
-    frame.setSize(200, 200);
-    frame.setVisible(true);
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    new UI();
   }
 
   public class MyKeyListener implements KeyListener {
@@ -68,6 +86,8 @@ public class UI extends JPanel {
 
       // Process all keys
       processKeys();
+      String[] columnNames = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+      model.setDataVector(worldMap.toArray(), columnNames);
     }
 
     private void processKeys() {
