@@ -46,6 +46,39 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     element.setBarrier(barrier);
   }
 
+  public String[][] toArray() {
+    String[][] array = new String[11][11];
+
+    int xCentre = fucker.getPosition().getX();
+    int yCentre = fucker.getPosition().getY();
+
+    for (int yOffset = 0; yOffset <= 10; yOffset++) {
+
+      int yCurrent = yCentre + yOffset;
+
+      for (int xOffset = 0; xOffset <= 10; xOffset++) {
+
+        int xCurrent = xCentre + xOffset;
+
+        WorldMapElement element = get(xCurrent, yCurrent);
+
+        if (xOffset == 5 && yOffset == 5) {
+          array[yOffset][xOffset] = "X";
+        } else if (element == null) {
+          array[yOffset][xOffset] = ".";
+        } else if (element.getBarrier() instanceof House) {
+          array[yOffset][xOffset] = "H";
+        } else if (element.getBarrier() instanceof Enemies) {
+          array[yOffset][xOffset] = "E";
+        } else {
+          array[yOffset][xOffset] = "?";
+        }
+      }
+    }
+
+    return array;
+  }
+
   @Override
   public String toString() {
 
