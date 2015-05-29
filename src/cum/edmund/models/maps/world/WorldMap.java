@@ -1,5 +1,9 @@
 package cum.edmund.models.maps.world;
 
+import java.net.URL;
+
+import javax.swing.ImageIcon;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +50,7 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     element.setBarrier(barrier);
   }
 
-  public String[][] toArray() {
+  public ImageIcon[][] toArray() {
 
     int size = 11;
     int centre = 11 / 2;
@@ -56,7 +60,7 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
       throw new RuntimeException("Size needs to be an even number");
     }
 
-    String[][] array = new String[size][size];
+    ImageIcon[][] array = new ImageIcon[size][size];
 
     int fuckerXPos = fucker.getPosition().getX();
     int fuckerYPos = fucker.getPosition().getY();
@@ -70,22 +74,36 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
         int worldXPos = fuckerXPos + (viewXPos - centre);
 
         WorldMapElement element = get(worldXPos, worldYPos);
+        array[viewYPos][viewXPos] = getTile(element, viewXPos, viewYPos, centre);
 
-        if (viewXPos == centre && viewYPos == centre) {
-          array[viewYPos][viewXPos] = "X";
-        } else if (element == null) {
-          array[viewYPos][viewXPos] = ".";
-        } else if (element.getBarrier() instanceof House) {
-          array[viewYPos][viewXPos] = "H";
-        } else if (element.getBarrier() instanceof Enemies) {
-          array[viewYPos][viewXPos] = "E";
-        } else {
-          array[viewYPos][viewXPos] = "?";
-        }
       }
     }
 
     return array;
+  }
+
+  public ImageIcon getTile(WorldMapElement element, int viewXPos, int viewYPos, int centre) {
+    URL grassUrl = ClassLoader.getSystemResource("grass.png");
+    URL playerUrl = ClassLoader.getSystemResource("player.png");
+    URL enemyUrl = ClassLoader.getSystemResource("enemy.png");
+    URL houseUrl = ClassLoader.getSystemResource("house.png");
+
+    ImageIcon grassTile = new ImageIcon(grassUrl);
+    ImageIcon playerTile = new ImageIcon(playerUrl);
+    ImageIcon enemyTile = new ImageIcon(enemyUrl);
+    ImageIcon houseTile = new ImageIcon(houseUrl);
+
+    if (viewXPos == centre && viewYPos == centre) {
+      return playerTile;
+    } else if (element == null) {
+      return grassTile;
+    } else if (element.getBarrier() instanceof House) {
+      return houseTile;
+    } else if (element.getBarrier() instanceof Enemies) {
+      return enemyTile;
+    } else {
+      throw new RuntimeException("what the fuck tile is this?");
+    }
   }
 
   @Override
