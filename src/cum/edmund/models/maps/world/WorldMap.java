@@ -47,31 +47,40 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
   }
 
   public String[][] toArray() {
-    String[][] array = new String[11][11];
 
-    int xCentre = fucker.getPosition().getX();
-    int yCentre = fucker.getPosition().getY();
+    int size = 11;
+    int centre = 11 / 2;
 
-    for (int yOffset = 0; yOffset <= 10; yOffset++) {
+    // Ensure there is a dead centre (ie 'size' must be even)
+    if (centre * 2 == size) {
+      throw new RuntimeException("Size needs to be an even number");
+    }
 
-      int yCurrent = yCentre + yOffset;
+    String[][] array = new String[size][size];
 
-      for (int xOffset = 0; xOffset <= 10; xOffset++) {
+    int fuckerXPos = fucker.getPosition().getX();
+    int fuckerYPos = fucker.getPosition().getY();
 
-        int xCurrent = xCentre + xOffset;
+    for (int viewYPos = 0; viewYPos < size; viewYPos++) {
 
-        WorldMapElement element = get(xCurrent, yCurrent);
+      int worldYPos = fuckerYPos - (viewYPos - centre);
 
-        if (xOffset == 5 && yOffset == 5) {
-          array[yOffset][xOffset] = "X";
+      for (int viewXPos = 0; viewXPos < size; viewXPos++) {
+
+        int worldXPos = fuckerXPos + (viewXPos - centre);
+
+        WorldMapElement element = get(worldXPos, worldYPos);
+
+        if (viewXPos == centre && viewYPos == centre) {
+          array[viewYPos][viewXPos] = "X";
         } else if (element == null) {
-          array[yOffset][xOffset] = ".";
+          array[viewYPos][viewXPos] = ".";
         } else if (element.getBarrier() instanceof House) {
-          array[yOffset][xOffset] = "H";
+          array[viewYPos][viewXPos] = "H";
         } else if (element.getBarrier() instanceof Enemies) {
-          array[yOffset][xOffset] = "E";
+          array[viewYPos][viewXPos] = "E";
         } else {
-          array[yOffset][xOffset] = "?";
+          array[viewYPos][viewXPos] = "?";
         }
       }
     }
