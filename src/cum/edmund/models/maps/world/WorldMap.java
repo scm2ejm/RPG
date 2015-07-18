@@ -1,17 +1,18 @@
 package cum.edmund.models.maps.world;
 
-import java.net.URL;
-
 import javax.swing.ImageIcon;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cum.edmund.core.Configuration;
 import cum.edmund.models.blocks.Barrier;
 import cum.edmund.models.blocks.House;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.characters.hero.Hero;
 import cum.edmund.models.map.SparseMatrix;
+import cum.edmund.models.maps.world.tiles.TileLoader;
+import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
 
 /**
  * This class represents the whole world. May use other models to represent individual areas.
@@ -22,13 +23,8 @@ import cum.edmund.models.map.SparseMatrix;
  */
 public class WorldMap extends SparseMatrix<WorldMapElement> {
 
-  private static final Logger LOGGER;
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(WorldMap.class);
   private Hero fucker;
-
-  static {
-    LOGGER = LoggerFactory.getLogger(WorldMap.class);
-  }
 
   public WorldMap(Hero fucker) {
     this.fucker = fucker;
@@ -50,62 +46,70 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     element.setBarrier(barrier);
   }
 
-  public ImageIcon[][] toArray() {
+  /**
+   * Creates view of the world to be rendered
+   */
+  public ImageIcon[][] createView() {
 
-    int size = 11;
-    int centre = 11 / 2;
+    int size = Configuration.UI_GRID_SIZE;
+    int centre = size / 2;
 
     // Ensure there is a dead centre (ie 'size' must be even)
     if (centre * 2 == size) {
       throw new RuntimeException("Size needs to be an even number");
     }
 
-    ImageIcon[][] array = new ImageIcon[size][size];
+    // This is the view of the world
+    ImageIcon[][] view = new ImageIcon[size][size];
 
     int fuckerXPos = fucker.getPosition().getX();
     int fuckerYPos = fucker.getPosition().getY();
 
     for (int viewYPos = 0; viewYPos < size; viewYPos++) {
 
+      // Calculate which world column this view column should display
       int worldYPos = fuckerYPos - (viewYPos - centre);
 
       for (int viewXPos = 0; viewXPos < size; viewXPos++) {
 
+        // Calculate which world row this view row should display
         int worldXPos = fuckerXPos + (viewXPos - centre);
 
+        // Get the current world element for this view cell
         WorldMapElement element = get(worldXPos, worldYPos);
-        array[viewYPos][viewXPos] = getTile(element, viewXPos, viewYPos, centre);
+
+        // Apply the tile for this element to the view
+        view[viewYPos][viewXPos] = getTile(element, viewXPos == centre && viewYPos == centre);
 
       }
     }
 
-    return array;
+    return view;
   }
 
-  public ImageIcon getTile(WorldMapElement element, int viewXPos, int viewYPos, int centre) {
-    URL grassUrl = ClassLoader.getSystemResource("grass.png");
-    URL playerUrl = ClassLoader.getSystemResource("player.png");
-    URL enemyUrl = ClassLoader.getSystemResource("enemy.png");
-    URL houseUrl = ClassLoader.getSystemResource("house.png");
-
-    ImageIcon grassTile = new ImageIcon(grassUrl);
-    ImageIcon playerTile = new ImageIcon(playerUrl);
-    ImageIcon enemyTile = new ImageIcon(enemyUrl);
-    ImageIcon houseTile = new ImageIcon(houseUrl);
-
-    if (viewXPos == centre && viewYPos == centre) {
-      return playerTile;
+  /**
+   * Looks up a tile for given element
+   * 
+   * @param element WorldMapElement to display
+   * @return Tile to display
+   */
+  public ImageIcon getTile(WorldMapElement element, boolean hero) {
+    if (hero) {
+      return TileLoader.getTile(TileType.PLAYER);
     } else if (element == null) {
-      return grassTile;
+      return TileLoader.getTile(TileType.GRASS);
     } else if (element.getBarrier() instanceof House) {
-      return houseTile;
+      return TileLoader.getTile(TileType.HOUSE);
     } else if (element.getBarrier() instanceof Enemies) {
-      return enemyTile;
+      return TileLoader.getTile(TileType.ENEMY);
     } else {
       throw new RuntimeException("what the fuck tile is this?");
     }
   }
 
+  
+  // TODO: FIX MOUSE AND DELETE toString() METHOD!!!
+  
   @Override
   public String toString() {
 

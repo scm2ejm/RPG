@@ -2,6 +2,8 @@ package cum.edmund.ui;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -12,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cum.edmund.core.Configuration;
 import cum.edmund.helpers.EnemiesHelper;
 import cum.edmund.helpers.WalkHelper;
 import cum.edmund.models.blocks.House;
@@ -30,6 +33,7 @@ public class UI extends JFrame {
   private WorldMap worldMap;
   private Hero fucker;
   private DefaultTableModel model;
+  private Object[] columnNames;
 
   static {
     LOGGER = LoggerFactory.getLogger(UI.class);
@@ -41,11 +45,17 @@ public class UI extends JFrame {
     setVisible(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    String[] columnNames = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+    int size = Configuration.UI_GRID_SIZE;
 
-    Object[][] data = new Object[11][11];
+    List<String> columnNames = new ArrayList<>();
+    for (int i = 0; i < size; i++) {
+      columnNames.add(String.valueOf(i));
+    }
+    this.columnNames = columnNames.toArray();
+    
+    Object[][] data = new Object[size][size];
 
-    model = new DefaultTableModel(data, columnNames);
+    model = new DefaultTableModel(data, this.columnNames);
 
     JTable table = new AssFuckGrid(model);
     table.setPreferredScrollableViewportSize(table.getPreferredSize());
@@ -58,7 +68,7 @@ public class UI extends JFrame {
     keysPressed = ConcurrentHashMap.newKeySet();
     fucker = new Hero("fucker", 0, 0);
     worldMap = new WorldMap(fucker);
-    model.setDataVector(worldMap.toArray(), columnNames);
+//    model.setDataVector(worldMap.toArray(), columnNames.toArray());
 
     KeyListener listener = new MyKeyListener();
     addKeyListener(listener);
@@ -86,8 +96,7 @@ public class UI extends JFrame {
 
       // Process all keys
       processKeys();
-      String[] columnNames = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
-      model.setDataVector(worldMap.toArray(), columnNames);
+      model.setDataVector(worldMap.createView(), columnNames);
     }
 
     private void processKeys() {
