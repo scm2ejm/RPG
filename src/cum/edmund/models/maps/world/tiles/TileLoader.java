@@ -8,7 +8,14 @@ import javax.swing.ImageIcon;
 
 import cum.edmund.models.maps.world.StretchIcon;
 import cum.edmund.models.maps.world.TileIcon;
+import cum.edmund.ui.UI;
 
+/**
+ * Loads tiles from file to be used by {@link UI}
+ * 
+ * @author Ed
+ *
+ */
 public class TileLoader {
 
   private static final Map<TileType, ImageIcon> TILES;
@@ -16,23 +23,31 @@ public class TileLoader {
   static {
     TILES = new ConcurrentHashMap<>();
 
-    URL grassUrl = ClassLoader.getSystemResource("grass.png");
-    URL playerUrl = ClassLoader.getSystemResource("player.png");
-    URL enemyUrl = ClassLoader.getSystemResource("enemy.png");
-    URL houseUrl = ClassLoader.getSystemResource("house.png");
-    ImageIcon grassTile = new TileIcon(grassUrl);
-    ImageIcon playerTile = new StretchIcon(playerUrl);
-    ImageIcon enemyTile = new StretchIcon(enemyUrl);
-    ImageIcon houseTile = new StretchIcon(houseUrl);
-    TILES.put(TileType.GRASS, grassTile);
-    TILES.put(TileType.PLAYER, playerTile);
-    TILES.put(TileType.ENEMY, enemyTile);
-    TILES.put(TileType.HOUSE, houseTile);
+    loadTile(TileType.GRASS, "grass.png", DrawType.TILE);
+    loadTile(TileType.PLAYER, "player.png", DrawType.STRETCH);
+    loadTile(TileType.ENEMY, "enemy.png", DrawType.STRETCH);
+    loadTile(TileType.HOUSE, "house.png", DrawType.STRETCH);
   }
 
   public enum TileType {
     GRASS, PLAYER, ENEMY, HOUSE
   };
+
+  public enum DrawType {
+    TILE, STRETCH
+  };
+
+  private static void loadTile(TileType tileType, String filename, DrawType drawType) {
+    URL url = ClassLoader.getSystemResource(filename);
+    switch (drawType) {
+      case STRETCH:
+        TILES.put(tileType, new StretchIcon(url));
+        break;
+      case TILE:
+        TILES.put(tileType, new TileIcon(url));
+        break;
+    }
+  }
 
   public static ImageIcon getTile(TileType type) {
     return TILES.get(type);
