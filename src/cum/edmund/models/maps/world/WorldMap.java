@@ -1,13 +1,18 @@
 package cum.edmund.models.maps.world;
 
+import javax.swing.ImageIcon;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import cum.edmund.core.Configuration;
 import cum.edmund.models.blocks.Barrier;
 import cum.edmund.models.blocks.House;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.characters.hero.Hero;
 import cum.edmund.models.map.SparseMatrix;
+import cum.edmund.models.maps.world.tiles.TileLoader;
+import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
 
 /**
  * This class represents the whole world. May use other models to represent individual areas.
@@ -18,13 +23,8 @@ import cum.edmund.models.map.SparseMatrix;
  */
 public class WorldMap extends SparseMatrix<WorldMapElement> {
 
-  private static final Logger LOGGER;
-
+  private static final Logger LOGGER = LoggerFactory.getLogger(WorldMap.class);
   private Hero fucker;
-
-  static {
-    LOGGER = LoggerFactory.getLogger(WorldMap.class);
-  }
 
   public WorldMap(Hero fucker) {
     this.fucker = fucker;
@@ -46,39 +46,70 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     element.setBarrier(barrier);
   }
 
-  public String[][] toArray() {
-    String[][] array = new String[11][11];
+  /**
+   * Creates view of the world to be rendered
+   */
+  public ImageIcon[][] createView() {
 
-    int xCentre = fucker.getPosition().getX();
-    int yCentre = fucker.getPosition().getY();
+    int size = Configuration.UI_GRID_SIZE;
+    int centre = size / 2;
 
-    for (int yOffset = 0; yOffset <= 10; yOffset++) {
+    // Ensure there is a dead centre (ie 'size' must be even)
+    if (centre * 2 == size) {
+      throw new RuntimeException("Size needs to be an even number");
+    }
 
-      int yCurrent = yCentre + yOffset;
+    // This is the view of the world
+    ImageIcon[][] view = new ImageIcon[size][size];
 
-      for (int xOffset = 0; xOffset <= 10; xOffset++) {
+    int fuckerXPos = fucker.getPosition().getX();
+    int fuckerYPos = fucker.getPosition().getY();
 
-        int xCurrent = xCentre + xOffset;
+    for (int viewYPos = 0; viewYPos < size; viewYPos++) {
 
-        WorldMapElement element = get(xCurrent, yCurrent);
+      // Calculate which world column this view column should display
+      int worldYPos = fuckerYPos - (viewYPos - centre);
 
-        if (xOffset == 5 && yOffset == 5) {
-          array[yOffset][xOffset] = "X";
-        } else if (element == null) {
-          array[yOffset][xOffset] = ".";
-        } else if (element.getBarrier() instanceof House) {
-          array[yOffset][xOffset] = "H";
-        } else if (element.getBarrier() instanceof Enemies) {
-          array[yOffset][xOffset] = "E";
-        } else {
-          array[yOffset][xOffset] = "?";
-        }
+      for (int viewXPos = 0; viewXPos < size; viewXPos++) {
+
+        // Calculate which world row this view row should display
+        int worldXPos = fuckerXPos + (viewXPos - centre);
+
+        // Get the current world element for this view cell
+        WorldMapElement element = get(worldXPos, worldYPos);
+
+        // Apply the tile for this element to the view
+        view[viewYPos][viewXPos] = getTile(element, viewXPos == centre && viewYPos == centre);
+
       }
     }
 
-    return array;
+    return view;
   }
 
+  /**
+   * Looks up a tile for given element
+   * 
+   * @param element WorldMapElement to display
+   * @return Tile to display
+   */
+  public ImageIcon getTile(WorldMapElement element, boolean hero) {
+    if (hero) {
+      return TileLoader.getTile(TileType.PLAYER);
+    } else if (element == null) {
+      return TileLoader.getTile(TileType.GRASS);
+    } else if (element.getBarrier() instanceof House) {
+      return TileLoader.getTile(TileType.HOUSE);
+    } else if (element.getBarrier() instanceof Enemies) {
+      return TileLoader.getTile(TileType.ENEMY);
+    } else {
+      throw new RuntimeException("what the fuck tile is this?");
+    }
+  }
+
+  
+  // TODO: FIX MOUSE AND DELETE toString() METHOD!!!
+  
   @Override
   public String toString() {
 
