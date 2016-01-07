@@ -11,6 +11,12 @@ import javax.swing.table.DefaultTableModel;
 import cum.edmund.core.Configuration;
 import cum.edmund.core.Engine;
 
+/**
+ * Basic tile-based UI for Return To Assfuck Castle
+ * 
+ * @author Ed
+ *
+ */
 @SuppressWarnings("serial")
 public class UI extends JFrame {
 
@@ -20,24 +26,23 @@ public class UI extends JFrame {
 
   public UI() {
     super("Return to AssFuck Castle");
-    setSize(200, 200);
-    setVisible(true);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    int size = Configuration.UI_GRID_SIZE;
-
-    List<String> columnNames = new ArrayList<>();
-    for (int i = 0; i < size; i++) {
-      columnNames.add(String.valueOf(i));
-    }
-    this.columnNames = columnNames.toArray();
-
-    Object[][] data = new Object[size][size];
-
-    model = new DefaultTableModel(data, this.columnNames);
-
+    columnNames = columnNames();
+    model = buildTable();
     engine = new Engine();
+
+    setupFrame();
+    setupTable();
+    setupKeyboardListener();
     
+  }
+
+  private void setupKeyboardListener() {
+    KeyListener listener = new KeyboardEventListener(this, engine);
+    addKeyListener(listener);
+  }
+
+  private void setupTable() {
     JTable table = new AssFuckGrid(model);
     table.setPreferredScrollableViewportSize(table.getPreferredSize());
     table.setTableHeader(null);
@@ -45,13 +50,32 @@ public class UI extends JFrame {
 
     // Set table resizer
     table.getParent().addComponentListener(new AssFuckTableResizer(table));
-
-
-    KeyListener listener = new KeyboardEventListener(this, engine);
-    addKeyListener(listener);
-    setFocusable(true);
     table.setEnabled(false);
+  }
 
+  private void setupFrame() {
+    setSize(200, 200);
+    setVisible(true);
+    setFocusable(true);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+  }
+
+  private DefaultTableModel buildTable() {
+    int size = Configuration.UI_GRID_SIZE;
+
+    Object[][] data = new Object[size][size];
+
+    return new DefaultTableModel(data, this.columnNames);
+  }
+
+  private Object[] columnNames() {
+    List<String> columnNames = new ArrayList<>();
+
+    for (int i = 0; i < Configuration.UI_GRID_SIZE; i++) {
+      columnNames.add(String.valueOf(i));
+    }
+
+    return columnNames.toArray();
   }
 
   public static void main(String[] args) {
