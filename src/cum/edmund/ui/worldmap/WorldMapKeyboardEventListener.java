@@ -1,12 +1,12 @@
-package cum.edmund.ui;
+package cum.edmund.ui.worldmap;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import cum.edmund.core.Engine;
 import cum.edmund.models.characters.Direction;
+import cum.edmund.models.maps.world.WalkOutcome;
 
 /**
  * Processes keyboard events, eg makes the player walk when a directional button is pressed
@@ -14,15 +14,15 @@ import cum.edmund.models.characters.Direction;
  * @author Ed
  *
  */
-public class KeyboardEventListener implements KeyListener {
+public class WorldMapKeyboardEventListener implements KeyListener {
 
   private Set<Integer> keysPressed;
-  private final UI ui;
-  private final Engine engine;
 
-  public KeyboardEventListener(UI ui, Engine engine) {
-    this.ui = ui;
-    this.engine = engine;
+  private WorldMapView worldMapView;
+
+  public WorldMapKeyboardEventListener(WorldMapView worldMapView) {
+
+    this.worldMapView = worldMapView;
     keysPressed = ConcurrentHashMap.newKeySet();
   }
 
@@ -37,7 +37,7 @@ public class KeyboardEventListener implements KeyListener {
     // Process all keys
     processKeys();
 
-    ui.drawThings();
+    worldMapView.drawThings();
   }
 
   private void processKeys() {
@@ -48,7 +48,7 @@ public class KeyboardEventListener implements KeyListener {
   }
 
   private void processOtherKeys() {
-    // TODO Auto-generated method stub
+    // Esc should open menu etc
   }
 
   private void processWalkKeys() {
@@ -72,7 +72,14 @@ public class KeyboardEventListener implements KeyListener {
       direction = Direction.EAST;
     }
 
-    engine.walk(direction);
+    if (direction != null) {
+      WalkOutcome outcome = worldMapView.getWorldMap().walk(direction);
+
+      if (outcome.isFight()) {
+        worldMapView.getUi().showFightView();
+
+      }
+    }
 
   }
 
