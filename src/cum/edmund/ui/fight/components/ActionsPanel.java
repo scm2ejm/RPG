@@ -1,4 +1,4 @@
-package cum.edmund.ui.fight;
+package cum.edmund.ui.fight.components;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -39,7 +39,7 @@ public class ActionsPanel extends JPanel {
     arrows = new ArrayList<>();
 
     Arrays.asList("Attack", "Magic", "Item", "Fuck Off").forEach(this::addMenuItem);
-    
+
     arrows.get(0).setVisible(true);
   }
 
@@ -79,11 +79,24 @@ public class ActionsPanel extends JPanel {
     if (selectedItem > 0) {
       selectedItem--;
     }
+    drawArrows();
   }
 
   public void downPressed() {
-    if (selectedItem < arrows.size()) {
+    if (selectedItem < arrows.size() - 1) {
       selectedItem++;
+    }
+    drawArrows();
+  }
+
+  private void drawArrows() {
+    for (int i = 0; i < arrows.size(); i++) {
+      JLabel arrow = arrows.get(i);
+      if (i == selectedItem) {
+        arrow.setVisible(true);
+      } else {
+        arrow.setVisible(false);
+      }
     }
   }
 }

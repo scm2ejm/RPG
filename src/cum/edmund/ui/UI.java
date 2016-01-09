@@ -1,16 +1,11 @@
 package cum.edmund.ui;
 
-import java.awt.event.KeyListener;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.table.DefaultTableModel;
 
-import cum.edmund.core.Configuration;
 import cum.edmund.core.Engine;
-import cum.edmund.ui.fight.FightPanel;
+import cum.edmund.ui.fight.FightView;
+import cum.edmund.ui.worldmap.WorldMapView;
 
 /**
  * Basic tile-based UI for Return To Assfuck Castle
@@ -21,35 +16,33 @@ import cum.edmund.ui.fight.FightPanel;
 @SuppressWarnings("serial")
 public class UI extends JFrame {
 
-  private DefaultTableModel model;
-  private Object[] columnNames;
   private Engine engine;
-  private AssFuckGrid worldView;
+  private WorldMapView worldMapView;
+  private FightView fightView;
 
   public UI() {
     super("Return to AssFuck Castle");
-
-    columnNames = columnNames();
-    model = buildTable();
-    engine = new Engine(this);
-
     setupFrame();
-    setupWorldView();
-    setupKeyboardListener();
+    
+    engine = new Engine();
 
+    setupWorldMapView();
+
+    // Draw stuff
+    validate();
+
+    worldMapView.grabFocus();
   }
 
-  private void setupKeyboardListener() {
-    KeyListener listener = new KeyboardEventListener(this, engine);
-    addKeyListener(listener);
-  }
+  private void setupWorldMapView() {
 
-  private void setupWorldView() {
-    worldView = new AssFuckGrid(model);
-    getContentPane().add(worldView);
+    worldMapView = new WorldMapView(this, engine.getWorldMap());
+    worldMapView.setVisible(true);
 
-    // Set table resizer
-    worldView.getParent().addComponentListener(new AssFuckTableResizer(worldView));
+    getContentPane().add(worldMapView);
+
+    // Set table resizer. Must be done after adding to Content Pane
+    worldMapView.getParent().addComponentListener(new AssFuckTableResizer(worldMapView));
 
   }
 
@@ -60,36 +53,15 @@ public class UI extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
-  private DefaultTableModel buildTable() {
-    int size = Configuration.UI_GRID_SIZE;
-
-    Object[][] data = new Object[size][size];
-
-    return new DefaultTableModel(data, this.columnNames);
-  }
-
-  private Object[] columnNames() {
-    List<String> columnNames = new ArrayList<>();
-
-    for (int i = 0; i < Configuration.UI_GRID_SIZE; i++) {
-      columnNames.add(String.valueOf(i));
-    }
-
-    return columnNames.toArray();
-  }
-
   public static void main(String[] args) {
     new UI();
   }
 
-  public void drawThings() {
-    model.setDataVector(engine.getWorldMap().createView(), columnNames);
-  }
-
-  public void showFightPanel() {
-    JPanel fightPanel = new FightPanel();
+  public void showFightView() {
+    JPanel fightPanel = new FightView();
     getContentPane().add(fightPanel);
-    worldView.setVisible(false);
+    worldMapView.setVisible(false);
+    fightPanel.grabFocus();
   }
 
 }

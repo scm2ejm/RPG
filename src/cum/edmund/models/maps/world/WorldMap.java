@@ -6,8 +6,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import cum.edmund.core.Configuration;
+import cum.edmund.helpers.WalkHelper;
 import cum.edmund.models.blocks.Barrier;
 import cum.edmund.models.blocks.House;
+import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.characters.hero.Hero;
 import cum.edmund.models.map.SparseMatrix;
@@ -107,9 +109,9 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     }
   }
 
-  
+
   // TODO: FIX MOUSE AND DELETE toString() METHOD!!!
-  
+
   @Override
   public String toString() {
 
@@ -149,5 +151,15 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
     sb.append("--------");
 
     return sb.toString();
+  }
+
+  public WalkOutcome walk(Direction direction) {
+    WalkOutcome outcome = WalkHelper.walk(fucker, direction, this);
+
+    if (outcome.isFight()) {
+      LOGGER.debug("Starting fight!");
+    }
+
+    return outcome;
   }
 }

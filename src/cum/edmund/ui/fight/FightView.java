@@ -9,9 +9,14 @@ import java.awt.GridBagLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 
-public class FightPanel extends JPanel {
+import cum.edmund.ui.fight.components.ActionsPanel;
 
-  public FightPanel() {
+public class FightView extends JPanel {
+
+  private ActionsPanel actionsPanel;
+  private JPanel playerStatsPanel;
+
+  public FightView() {
     super(new GridBagLayout());
     setBackground(Color.RED);
 
@@ -43,7 +48,15 @@ public class FightPanel extends JPanel {
 
     add(enemyStatsText, c);
 
-    c = new GridBagConstraints();
+    setupPlayerStatsPanel();
+
+    setupActionsPanel();
+
+    addKeyListener(new FightViewKeyboardEventListener(this));
+  }
+
+  private void setupPlayerStatsPanel() {
+    GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
     c.gridx = 0;
     c.gridy = 3;
@@ -51,20 +64,33 @@ public class FightPanel extends JPanel {
     c.weighty = 0.5;
     c.anchor = GridBagConstraints.LAST_LINE_START;
 
-    JPanel playerStatsPanel = new JPanel();
+    playerStatsPanel = new JPanel();
     playerStatsPanel.setBackground(Color.BLACK);
     playerStatsPanel.setVisible(true);
-    add(playerStatsPanel, c);
 
-    c = new GridBagConstraints();
+    add(playerStatsPanel, c);
+  }
+
+  private void setupActionsPanel() {
+    actionsPanel = new ActionsPanel();
+
+    GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
     c.gridx = 1;
     c.gridy = 3;
     c.weightx = 0.5;
     c.weighty = 0.5;
     c.anchor = GridBagConstraints.LAST_LINE_END;
-    add(new ActionsPanel(), c);
+
+    add(actionsPanel, c);
   }
 
+  public ActionsPanel getActionsPanel() {
+    return actionsPanel;
+  }
+
+  public JPanel getPlayerStatsPanel() {
+    return playerStatsPanel;
+  }
 
 }
