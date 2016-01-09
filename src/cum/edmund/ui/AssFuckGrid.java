@@ -15,6 +15,8 @@ public class AssFuckGrid extends JTable {
   public AssFuckGrid(DefaultTableModel model) {
     super(model);
     setTableHeader(null);
+    setEnabled(false);
+    setPreferredScrollableViewportSize(getPreferredSize());
   }
 
   @Override

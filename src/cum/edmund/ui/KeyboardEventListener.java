@@ -48,7 +48,12 @@ public class KeyboardEventListener implements KeyListener {
   }
 
   private void processOtherKeys() {
-    // TODO Auto-generated method stub
+    // I guess fight menus etc would go here
+    
+    // TODO: Remove this!
+    if (isPressed(KeyEvent.VK_A)) {
+      ui.showFightPanel();
+    }
   }
 
   private void processWalkKeys() {
@@ -72,7 +77,9 @@ public class KeyboardEventListener implements KeyListener {
       direction = Direction.EAST;
     }
 
-    engine.walk(direction);
+    if (direction != null) {
+      engine.walk(direction);
+    }
 
   }
 

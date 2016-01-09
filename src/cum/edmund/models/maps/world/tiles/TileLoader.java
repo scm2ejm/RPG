@@ -27,10 +27,11 @@ public class TileLoader {
     loadTile(TileType.PLAYER, "player.png", DrawType.STRETCH);
     loadTile(TileType.ENEMY, "enemy.png", DrawType.STRETCH);
     loadTile(TileType.HOUSE, "house.png", DrawType.STRETCH);
+    loadTile(TileType.HAND, "hand2.png", DrawType.STRETCH);
   }
 
   public enum TileType {
-    GRASS, PLAYER, ENEMY, HOUSE
+    GRASS, PLAYER, ENEMY, HOUSE, HAND
   };
 
   public enum DrawType {

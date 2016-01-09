@@ -17,10 +17,12 @@ public class Engine {
   
   private static final Logger LOGGER = LoggerFactory.getLogger(UI.class);
   
+  private UI ui;
   private WorldMap worldMap;
   private Hero fucker;
   
-  public Engine() {
+  public Engine(UI ui) {
+    this.ui = ui;
     fucker = new Hero("fucker", 0, 0);
     setWorldMap(new WorldMap(fucker));
     
@@ -34,6 +36,7 @@ public class Engine {
 
     if (outcome.isFight()) {
       LOGGER.debug("Starting fight!");
+      ui.showFightPanel();
     }
   }
 

@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JFrame;
-import javax.swing.JTable;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
 import cum.edmund.core.Configuration;
 import cum.edmund.core.Engine;
+import cum.edmund.ui.fight.FightPanel;
 
 /**
  * Basic tile-based UI for Return To Assfuck Castle
@@ -23,18 +24,19 @@ public class UI extends JFrame {
   private DefaultTableModel model;
   private Object[] columnNames;
   private Engine engine;
+  private AssFuckGrid worldView;
 
   public UI() {
     super("Return to AssFuck Castle");
 
     columnNames = columnNames();
     model = buildTable();
-    engine = new Engine();
+    engine = new Engine(this);
 
     setupFrame();
-    setupTable();
+    setupWorldView();
     setupKeyboardListener();
-    
+
   }
 
   private void setupKeyboardListener() {
@@ -42,15 +44,13 @@ public class UI extends JFrame {
     addKeyListener(listener);
   }
 
-  private void setupTable() {
-    JTable table = new AssFuckGrid(model);
-    table.setPreferredScrollableViewportSize(table.getPreferredSize());
-    table.setTableHeader(null);
-    getContentPane().add(table);
+  private void setupWorldView() {
+    worldView = new AssFuckGrid(model);
+    getContentPane().add(worldView);
 
     // Set table resizer
-    table.getParent().addComponentListener(new AssFuckTableResizer(table));
-    table.setEnabled(false);
+    worldView.getParent().addComponentListener(new AssFuckTableResizer(worldView));
+
   }
 
   private void setupFrame() {
@@ -85,4 +85,11 @@ public class UI extends JFrame {
   public void drawThings() {
     model.setDataVector(engine.getWorldMap().createView(), columnNames);
   }
+
+  public void showFightPanel() {
+    JPanel fightPanel = new FightPanel();
+    getContentPane().add(fightPanel);
+    worldView.setVisible(false);
+  }
+
 }
