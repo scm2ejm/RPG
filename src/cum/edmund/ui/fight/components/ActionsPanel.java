@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import javax.swing.BorderFactory;
@@ -14,6 +13,9 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import cum.edmund.models.maps.world.tiles.TileLoader;
 import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
@@ -26,8 +28,11 @@ import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
  */
 public class ActionsPanel extends JPanel {
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(ActionsPanel.class);
+
   private int selectedItem;
   private List<JLabel> arrows;
+  private List<AssFuckMenu> menuItems;
 
   public ActionsPanel() {
     super(new GridBagLayout());
@@ -43,8 +48,12 @@ public class ActionsPanel extends JPanel {
 
     selectedItem = 0;
     arrows = new ArrayList<>();
+    menuItems = new ArrayList<>();
 
-    Arrays.asList("Attack", "Magic", "Item", "Fuck Off").forEach(this::addMenuItem);
+    addMenuItem("Attack", () -> LOGGER.error("Attack"));
+    addMenuItem("Magic", () -> LOGGER.error("Magic"));
+    addMenuItem("Item", () -> LOGGER.error("Item"));
+    addMenuItem("Fuck Off", () -> LOGGER.error("Fuck Off"));
 
     arrows.get(0).setVisible(true);
   }
@@ -65,7 +74,7 @@ public class ActionsPanel extends JPanel {
     arrows.add(selected);
   }
 
-  private void addMenuItem(String text) {
+  private void addMenuItem(String text, Runnable task) {
     GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
     c.gridx = 1;
@@ -77,6 +86,8 @@ public class ActionsPanel extends JPanel {
     JLabel label = new JLabel(text);
     label.setForeground(Color.WHITE);
     add(label, c);
+
+    menuItems.add(new AssFuckMenu(text, task));
 
     addArrow(arrows.size());
   }
@@ -93,6 +104,10 @@ public class ActionsPanel extends JPanel {
       selectedItem++;
     }
     drawArrows();
+  }
+
+  public void enterPressed() {
+    menuItems.get(selectedItem).select();
   }
 
   private void drawArrows() {

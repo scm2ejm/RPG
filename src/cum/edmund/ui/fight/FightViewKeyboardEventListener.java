@@ -26,6 +26,8 @@ public class FightViewKeyboardEventListener implements KeyListener {
       fightView.getActionsPanel().upPressed();
     } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
       fightView.getActionsPanel().downPressed();
+    } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+      fightView.getActionsPanel().enterPressed();
     }
   }
 
