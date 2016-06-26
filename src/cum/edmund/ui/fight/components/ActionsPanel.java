@@ -18,6 +18,12 @@ import javax.swing.border.EmptyBorder;
 import cum.edmund.models.maps.world.tiles.TileLoader;
 import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
 
+/**
+ * Represents the menu in a fight. Eg Fight, Item, etc
+ *
+ * @author Ed
+ *
+ */
 public class ActionsPanel extends JPanel {
 
   private int selectedItem;
