@@ -77,6 +77,6 @@ public class WorldMapWalkTest {
     assertTrue(outcome.isFight());
     assertEquals(new Coord(3, 0), outcome.getNewPosition());
     assertEquals(new Coord(3, 0), fucker.getPosition());
-    assertEquals(2, outcome.getEnemies().totalCount());
+    assertEquals(2, outcome.getEnemies().getEntourage().totalCount());
   }
 }

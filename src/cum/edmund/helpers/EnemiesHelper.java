@@ -15,7 +15,7 @@ public class EnemiesHelper {
     Enemies enemies = new Enemies(position);
 
     for (int i = 0; i < enemiesToCreate; i++) {
-      enemies.add(new ButtasaurusAss(position));
+      enemies.getEntourage().add(new ButtasaurusAss(position));
     }
 
     return enemies;

@@ -35,14 +35,14 @@ public class WorldMapEnemyTest {
     Enemies foundEnemies = element.getEnemies();
     House foundHouse = element.getHouse();
     assertNotNull(foundEnemies);
-    assertEquals(2, foundEnemies.allEnemies().size());
+    assertEquals(2, foundEnemies.getEntourage().allCharacters().size());
     assertNull(foundHouse);
 
     element = map.get(10, 10);
     foundEnemies = element.getEnemies();
     foundHouse = element.getHouse();
     assertNotNull(foundEnemies);
-    assertEquals(1, foundEnemies.allEnemies().size());
+    assertEquals(1, foundEnemies.getEntourage().allCharacters().size());
     assertNull(foundHouse);
 
   }
