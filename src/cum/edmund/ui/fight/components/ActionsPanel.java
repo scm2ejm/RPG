@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import cum.edmund.models.maps.world.tiles.TileLoader;
 import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
+import cum.edmund.ui.UI;
 
 /**
  * Represents the menu in a fight. Eg Fight, Item, etc
@@ -50,12 +51,31 @@ public class ActionsPanel extends JPanel {
     arrows = new ArrayList<>();
     menuItems = new ArrayList<>();
 
-    addMenuItem("Attack", () -> LOGGER.error("Attack"));
+    topLevel();
+  }
+
+  private void topLevel() {
+    clearMenu();
+    addMenuItem("Attack", this::attack);
     addMenuItem("Magic", () -> LOGGER.error("Magic"));
     addMenuItem("Item", () -> LOGGER.error("Item"));
-    addMenuItem("Fuck Off", () -> LOGGER.error("Fuck Off"));
+    addMenuItem("Fuck Off", () -> UI.getInstance().showWorldMap());
+  }
 
-    arrows.get(0).setVisible(true);
+  private void clearMenu() {
+    // Remove all components
+    removeAll();
+
+    // Reset our vars
+    selectedItem = 0;
+    arrows.clear();
+    menuItems.clear();
+  }
+
+  private void attack() {
+    clearMenu();
+    addMenuItem("Attack 1", () -> LOGGER.error("Attack"));
+    addMenuItem("Cancel", this::topLevel);
   }
 
   private void addArrow(int y) {
@@ -69,7 +89,7 @@ public class ActionsPanel extends JPanel {
 
     ImageIcon hand = TileLoader.getTile(TileType.HAND);
     JLabel selected = new JLabel(hand);
-    selected.setVisible(false);
+    selected.setVisible(y == 0 ? true : false);
     add(selected, c);
     arrows.add(selected);
   }
@@ -90,6 +110,8 @@ public class ActionsPanel extends JPanel {
     menuItems.add(new AssFuckMenu(text, task));
 
     addArrow(arrows.size());
+    
+    validate();
   }
 
   public void upPressed() {

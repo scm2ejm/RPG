@@ -1,5 +1,7 @@
 package cum.edmund.ui;
 
+import java.awt.Dimension;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -13,24 +15,28 @@ import cum.edmund.ui.worldmap.WorldMapView;
  * @author Ed
  *
  */
-@SuppressWarnings("serial")
 public class UI extends JFrame {
 
+  private static final UI INSTANCE = new UI();
+  
   private Engine engine;
   private WorldMapView worldMapView;
-  private FightView fightView;
+  private JPanel fightPanel;
 
-  public UI() {
+
+  private UI() {
     super("Return to AssFuck Castle");
     setupFrame();
     
     engine = new Engine();
+    fightPanel = new FightView();
 
     setupWorldMapView();
 
     // Draw stuff
     validate();
 
+    getContentPane().add(fightPanel);
     worldMapView.grabFocus();
   }
 
@@ -43,25 +49,33 @@ public class UI extends JFrame {
 
     // Set table resizer. Must be done after adding to Content Pane
     worldMapView.getParent().addComponentListener(new AssFuckTableResizer(worldMapView));
-
+    
+    // Set size again to trigger redraw
+    worldMapView.getParent().setSize(new Dimension(800,600));
   }
 
   private void setupFrame() {
-    setSize(200, 200);
+    setSize(800, 600);
     setVisible(true);
     setFocusable(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
+  public static UI getInstance() {
+    return INSTANCE;
+  }
+
   public static void main(String[] args) {
-    new UI();
+    UI.getInstance();
   }
 
   public void showFightView() {
-    JPanel fightPanel = new FightView();
-    getContentPane().add(fightPanel);
     worldMapView.setVisible(false);
     fightPanel.grabFocus();
   }
 
+  public void showWorldMap() {
+    worldMapView.setVisible(true);
+    worldMapView.grabFocus();
+  }
 }
