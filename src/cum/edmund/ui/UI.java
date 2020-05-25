@@ -1,9 +1,9 @@
 package cum.edmund.ui;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-
 import cum.edmund.core.Engine;
+import cum.edmund.models.characters.enemies.Enemies;
+import cum.edmund.models.map.Coord;
 import cum.edmund.ui.fight.FightView;
 import cum.edmund.ui.worldmap.WorldMapView;
 
@@ -23,7 +23,7 @@ public class UI extends JFrame {
   public UI() {
     super("Return to AssFuck Castle");
     setupFrame();
-    
+
     engine = new Engine();
 
     setupWorldMapView();
@@ -31,26 +31,32 @@ public class UI extends JFrame {
     // Draw stuff
     validate();
 
-    worldMapView.grabFocus();
+
   }
 
   private void setupWorldMapView() {
 
     worldMapView = new WorldMapView(this, engine.getWorldMap());
-    worldMapView.setVisible(true);
 
     getContentPane().add(worldMapView);
 
     // Set table resizer. Must be done after adding to Content Pane
     worldMapView.getParent().addComponentListener(new AssFuckTableResizer(worldMapView));
 
+    worldMapView.setVisible(true);
+    worldMapView.grabFocus();
+    worldMapView.drawThings();
+    worldMapView.getParent().setSize(200, 200);
+
   }
 
   private void setupFrame() {
-    setSize(200, 200);
+    setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+    // setSize(200, 200);
     setVisible(true);
     setFocusable(true);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
   }
 
   public static void main(String[] args) {
@@ -58,10 +64,22 @@ public class UI extends JFrame {
   }
 
   public void showFightView() {
-    JPanel fightPanel = new FightView();
-    getContentPane().add(fightPanel);
-    worldMapView.setVisible(false);
-    fightPanel.grabFocus();
+    fightView = new FightView(this, engine.entourage(), new Enemies(new Coord(1, 1)));
+    getContentPane().removeAll();
+    getContentPane().add(fightView);
+
+    fightView.showFightPanel();
+
+    fightView.revalidate();
+    fightView.grabFocus();
+  }
+
+  public void showWorldMapView() {
+    getContentPane().removeAll();
+    getContentPane().add(worldMapView);
+
+    worldMapView.revalidate();
+    worldMapView.grabFocus();
   }
 
 }

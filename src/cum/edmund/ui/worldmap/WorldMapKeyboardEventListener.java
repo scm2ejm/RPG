@@ -4,7 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
+import cum.edmund.audio.AudioEngine;
 import cum.edmund.models.characters.Direction;
 import cum.edmund.models.maps.world.WalkOutcome;
 
@@ -76,8 +76,9 @@ public class WorldMapKeyboardEventListener implements KeyListener {
       WalkOutcome outcome = worldMapView.getWorldMap().walk(direction);
 
       if (outcome.isFight()) {
+        AudioEngine.startFightBackgroundMusic();
+        
         worldMapView.getUi().showFightView();
-
       }
     }
 

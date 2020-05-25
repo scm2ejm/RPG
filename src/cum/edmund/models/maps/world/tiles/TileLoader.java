@@ -1,11 +1,13 @@
 package cum.edmund.models.maps.world.tiles;
 
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.ImageObserver;
 import java.net.URL;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
 import javax.swing.ImageIcon;
-
 import cum.edmund.models.maps.world.StretchIcon;
 import cum.edmund.models.maps.world.TileIcon;
 import cum.edmund.ui.UI;
@@ -24,8 +26,8 @@ public class TileLoader {
     TILES = new ConcurrentHashMap<>();
 
     loadTile(TileType.GRASS, "grass.png", DrawType.TILE);
-    loadTile(TileType.PLAYER, "player.png", DrawType.STRETCH);
-    loadTile(TileType.ENEMY, "enemy.png", DrawType.STRETCH);
+    loadTile(TileType.PLAYER, "walk.gif", DrawType.STRETCH);
+    loadTile(TileType.ENEMY, "cat.gif", DrawType.STRETCH);
     loadTile(TileType.HOUSE, "house.png", DrawType.STRETCH);
     loadTile(TileType.HAND, "hand2.png", DrawType.STRETCH);
   }
@@ -50,7 +52,20 @@ public class TileLoader {
     }
   }
 
-  public static ImageIcon getTile(TileType type) {
-    return TILES.get(type);
+  public static ImageIcon getNewPlayerTile() {
+    return new StretchIcon(ClassLoader.getSystemResource("walk.gif"));
+  }
+
+  public static ImageIcon getNewEnemyTile() {
+    return new StretchIcon(ClassLoader.getSystemResource("cat.gif"));
+  }
+
+  public static ImageIcon getTile(TileType type, ImageObserver observer) {
+    ImageIcon icon = TILES.get(type);
+
+    // This is to make GIFs animate
+    icon.setImageObserver(observer);
+
+    return icon;
   }
 }

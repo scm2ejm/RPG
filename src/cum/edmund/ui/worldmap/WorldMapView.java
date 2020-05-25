@@ -65,7 +65,7 @@ public class WorldMapView extends JTable {
   }
   
   public void drawThings() {
-    model.setDataVector(worldMap.createView(), columnNames);
+    model.setDataVector(worldMap.createView(this), columnNames);
   }
 
   private void setupKeyboardListener() {

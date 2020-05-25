@@ -1,10 +1,9 @@
 package cum.edmund.models.maps.world;
 
+import java.awt.image.ImageObserver;
 import javax.swing.ImageIcon;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import cum.edmund.core.Configuration;
 import cum.edmund.helpers.WalkHelper;
 import cum.edmund.models.blocks.Barrier;
@@ -15,6 +14,7 @@ import cum.edmund.models.characters.hero.Hero;
 import cum.edmund.models.map.SparseMatrix;
 import cum.edmund.models.maps.world.tiles.TileLoader;
 import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
+import cum.edmund.ui.worldmap.WorldMapView;
 
 /**
  * This class represents the whole world. May use other models to represent individual areas.
@@ -50,8 +50,9 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
 
   /**
    * Creates view of the world to be rendered
+   * @param worldMapView 
    */
-  public ImageIcon[][] createView() {
+  public ImageIcon[][] createView(WorldMapView worldMapView) {
 
     int size = Configuration.UI_GRID_SIZE;
     int centre = size / 2;
@@ -81,7 +82,7 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
         WorldMapElement element = get(worldXPos, worldYPos);
 
         // Apply the tile for this element to the view
-        view[viewYPos][viewXPos] = getTile(element, viewXPos == centre && viewYPos == centre);
+        view[viewYPos][viewXPos] = getTile(element, viewXPos == centre && viewYPos == centre, worldMapView);
 
       }
     }
@@ -93,20 +94,22 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
    * Looks up a tile for given element
    * 
    * @param element WorldMapElement to display
+   * @param worldMapView 
    * @return Tile to display
    */
-  public ImageIcon getTile(WorldMapElement element, boolean hero) {
+  public ImageIcon getTile(WorldMapElement element, boolean hero, ImageObserver observer) {
     if (hero) {
-      return TileLoader.getTile(TileType.PLAYER);
+      return TileLoader.getTile(TileType.PLAYER, observer);
     } else if (element == null) {
-      return TileLoader.getTile(TileType.GRASS);
+      return TileLoader.getTile(TileType.GRASS, observer);
     } else if (element.getBarrier() instanceof House) {
-      return TileLoader.getTile(TileType.HOUSE);
+      return TileLoader.getTile(TileType.HOUSE, observer);
     } else if (element.getBarrier() instanceof Enemies) {
-      return TileLoader.getTile(TileType.ENEMY);
+      return TileLoader.getTile(TileType.ENEMY, observer);
     } else {
       throw new RuntimeException("what the fuck tile is this?");
     }
+
   }
 
 
