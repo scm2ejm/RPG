@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -36,6 +36,7 @@ public class ActionsPanel extends JPanel {
   private int selectedItem;
   private List<JLabel> arrows;
   private List<AssFuckMenu> menuItems;
+  private Timer timer;
 
 
   public ActionsPanel(UI ui, FightView fightView) {
@@ -43,6 +44,7 @@ public class ActionsPanel extends JPanel {
 
     this.ui = ui;
     this.fightView = fightView;
+    this.timer = new Timer();
 
     Border border = BorderFactory.createLineBorder(Color.WHITE, 5, true);
     Border margin = new EmptyBorder(5, 5, 5, 5);
@@ -62,76 +64,43 @@ public class ActionsPanel extends JPanel {
 
   }
 
-  private Map<String, Runnable> topMenu() {
-    Map<String, Runnable> menu = new LinkedHashMap<>();
-    menu.put("Attack", () -> renderMenu(attackMenu()));
-    menu.put("Magic", () -> renderMenu(magicMenu()));
-    menu.put("Item", () -> renderMenu(itemMenu()));
-    menu.put("Fuck Off", () -> ui.showWorldMapView());
+  private List<AssFuckMenu> topMenu() {
+    List<AssFuckMenu> menu = new ArrayList<>();
+    menu.add(new AssFuckMenu("Attack", () -> renderMenu(attackMenu())));
+    menu.add(new AssFuckMenu("Magic", () -> renderMenu(magicMenu())));
+    menu.add(new AssFuckMenu("Item", () -> renderMenu(itemMenu())));
+    menu.add(new AssFuckMenu("Fuck Off", () -> ui.showWorldMapView()));
     return menu;
   }
 
-  private Map<String, Runnable> attackMenu() {
-    Map<String, Runnable> menu = new LinkedHashMap<>();
-    menu.put("Butt Attack", () -> LOGGER.error("Butt attack"));
-    menu.put("Wiener Attack", () -> LOGGER.error("Wiener Attack"));
-    menu.put("Heart Attack", () -> LOGGER.error("Another Wiener Attack"));
-    menu.put("back", () -> renderMenu(topMenu()));
+  private List<AssFuckMenu> attackMenu() {
+    List<AssFuckMenu> menu = new ArrayList<>();
+    menu.add(new AssFuckMenu("Butt Attack", () -> LOGGER.error("Butt Attack")));
+    menu.add(new AssFuckMenu("Wiener Attack", () -> LOGGER.error("Wiener Attack")));
+    menu.add(new AssFuckMenu("Heart Attack", () -> LOGGER.error("Heart Attack")));
+    menu.add(new AssFuckMenu("back", () -> renderMenu(topMenu())));
     return menu;
   }
 
-  private Map<String, Runnable> magicMenu() {
-    Map<String, Runnable> menu = new LinkedHashMap<>();
-    menu.put("Plasma Jizz", () -> LOGGER.error("Plasma Jizz attack"));
-    menu.put("Yellow Snow", () -> LOGGER.error("Yellow Snow attack"));
-    menu.put("Mikey's Cock Rocket", () -> {
-      fightView.setupPlayerImagePanelCockRocket();
-
-      AssFuckMenu thisMenu = menuItems.get(selectedItem);
-      fightView.showText(thisMenu.couldPerform());
-
-      new java.util.Timer().schedule(new java.util.TimerTask() {
-        @Override
-        public void run() {
-          fightView.setupPlayerImagePanel();
-          
-          AssFuckMenu stuff = menuItems.get(selectedItem);
-          fightView.showText(stuff.hasPerformed());
-        }
-      }, 2500);
-    });
-
-
-    menu.put("Explosivo Diarrhea", () -> {
-      fightView.setupPlayerImagePanelPoop();
-
-      AssFuckMenu thisMenu = menuItems.get(selectedItem);
-      fightView.showText(thisMenu.couldPerform());
-      
-      new java.util.Timer().schedule(new java.util.TimerTask() {
-        @Override
-        public void run() {
-          fightView.setupPlayerImagePanel();
-          
-          AssFuckMenu stuff = menuItems.get(selectedItem);
-          fightView.showText(stuff.hasPerformed());
-        }
-      }, 5000);
-    });
-
-    menu.put("back", () -> renderMenu(topMenu()));
+  private List<AssFuckMenu> magicMenu() {
+    List<AssFuckMenu> menu = new ArrayList<>();
+    menu.add(new AssFuckMenu("Plasma Jizz", () -> LOGGER.error("Plasma Jizz")));
+    menu.add(new AssFuckMenu("Yellow Snow", () -> LOGGER.error("Yellow Snow")));
+    menu.add(new CockRocketMenuItem());
+    menu.add(new ExplosivoDiarrheaMenuItem());
+    menu.add(new AssFuckMenu("back", () -> renderMenu(topMenu())));
     return menu;
   }
 
-  private Map<String, Runnable> itemMenu() {
-    Map<String, Runnable> menu = new LinkedHashMap<>();
-    menu.put("Mints", () -> LOGGER.error("Mints"));
-    menu.put("TP", () -> LOGGER.error("TP"));
-    menu.put("back", () -> renderMenu(topMenu()));
+  private List<AssFuckMenu> itemMenu() {
+    List<AssFuckMenu> menu = new ArrayList<>();
+    menu.add(new AssFuckMenu("Mints", () -> LOGGER.error("Mints")));
+    menu.add(new AssFuckMenu("TP", () -> LOGGER.error("TP")));
+    menu.add(new AssFuckMenu("back", () -> renderMenu(topMenu())));
     return menu;
   }
 
-  private void renderMenu(Map<String, Runnable> menu) {
+  private void renderMenu(List<AssFuckMenu> menu) {
     // Clear all previous components
     this.removeAll();
     selectedItem = 0;
@@ -139,7 +108,7 @@ public class ActionsPanel extends JPanel {
     menuItems.clear();
 
     // Add new components
-    menu.forEach((k, v) -> addMenuItem(k, v));
+    menu.forEach(this::addMenuItem);
     arrows.get(0).setVisible(true);
 
     // Redraw
@@ -163,7 +132,7 @@ public class ActionsPanel extends JPanel {
     arrows.add(selected);
   }
 
-  private void addMenuItem(String text, Runnable task) {
+  private void addMenuItem(AssFuckMenu menuItem) {
     GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
     c.gridx = 1;
@@ -172,11 +141,11 @@ public class ActionsPanel extends JPanel {
     c.weighty = 1;
     c.anchor = GridBagConstraints.LINE_START;
 
-    JLabel label = new JLabel(text);
+    JLabel label = new JLabel(menuItem.getName());
     label.setForeground(Color.WHITE);
     add(label, c);
 
-    menuItems.add(new AssFuckMenu(text, task));
+    menuItems.add(menuItem);
 
     addArrow(arrows.size());
   }
@@ -186,7 +155,7 @@ public class ActionsPanel extends JPanel {
       selectedItem--;
     }
     drawArrows();
-    
+
     AssFuckMenu menu = menuItems.get(selectedItem);
     fightView.showText(menu.couldPerform());
   }
@@ -203,7 +172,35 @@ public class ActionsPanel extends JPanel {
   }
 
   public void enterPressed() {
-    menuItems.get(selectedItem).select();
+
+    // Cancel any futre timer actions
+    timer.cancel();
+
+    // Get the menu item
+    AssFuckMenu thisMenu = menuItems.get(selectedItem);
+
+    fightView.showText(thisMenu.isPerforming());
+
+    if (thisMenu.getIconFilename() != null) {
+      fightView.changePlayerIcon(thisMenu.getIconFilename());
+    }
+
+    // Do it's thang
+    thisMenu.select();
+
+    // Schedule the reset when it's complete
+    timer = new Timer();
+    timer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        // The action is complete so restore original player image
+        fightView.setupPlayerImagePanel();
+
+        fightView.showText(thisMenu.hasPerformed());
+      }
+    }, thisMenu.getDuration());
+
+    // Redraw stuff
     drawArrows();
   }
 

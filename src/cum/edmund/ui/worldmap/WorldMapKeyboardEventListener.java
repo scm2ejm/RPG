@@ -93,4 +93,8 @@ public class WorldMapKeyboardEventListener implements KeyListener {
     // Record that this key has been released
     keysPressed.remove(e.getKeyCode());
   }
+  
+  public void reset() {
+    keysPressed.clear();
+  }
 }

@@ -80,6 +80,7 @@ public class UI extends JFrame {
 
     worldMapView.revalidate();
     worldMapView.grabFocus();
+    worldMapView.resetKeyboardActions();
   }
 
 }

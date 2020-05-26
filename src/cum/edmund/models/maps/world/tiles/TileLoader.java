@@ -28,7 +28,7 @@ public class TileLoader {
     loadTile(TileType.HOUSE, "house.png", DrawType.STRETCH);
     loadTile(TileType.HAND, "hand2.png", DrawType.STRETCH);
     loadTile(TileType.MOUNTAIN, "mountian.png", DrawType.STRETCH);
-    
+
   }
 
   public enum TileType {
@@ -39,30 +39,26 @@ public class TileLoader {
     TILE, STRETCH
   };
 
-  private static void loadTile(TileType tileType, String filename, DrawType drawType) {
+  public static ImageIcon loadTile(String filename, DrawType drawType) {
     URL url = ClassLoader.getSystemResource(filename);
     switch (drawType) {
       case STRETCH:
-        TILES.put(tileType, new StretchIcon(url));
-        break;
+        return new StretchIcon(url);
       case TILE:
-        TILES.put(tileType, new TileIcon(url));
-        break;
+        return new TileIcon(url);
+      default:
+        throw new RuntimeException("The fuck is a " + drawType + "?");
     }
+  }
+
+  private static void loadTile(TileType tileType, String filename, DrawType drawType) {
+    TILES.put(tileType, loadTile(filename, drawType));
   }
 
   public static ImageIcon getNewPlayerTile() {
     return new StretchIcon(ClassLoader.getSystemResource("walk.gif"));
   }
 
-  public static ImageIcon getNewPlayerPoopTile() {
-    return new StretchIcon(ClassLoader.getSystemResource("poop.gif"));
-  }
-  
-  public static ImageIcon getNewPlayerCockRocketTile() {
-    return new StretchIcon(ClassLoader.getSystemResource("cockrocket.gif"));
-  }
-  
   public static ImageIcon getNewEnemyTile() {
     return new StretchIcon(ClassLoader.getSystemResource("cat.gif"));
   }

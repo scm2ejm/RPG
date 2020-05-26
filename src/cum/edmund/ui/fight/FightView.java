@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.maps.world.tiles.TileLoader;
+import cum.edmund.models.maps.world.tiles.TileLoader.DrawType;
 import cum.edmund.ui.UI;
 import cum.edmund.ui.fight.components.ActionsPanel;
 
@@ -118,16 +119,12 @@ public class FightView extends JPanel {
     add(enemyStatsText, c);
   }
   
-  public void setupPlayerImagePanelCockRocket() {
-    setupPlayerImagePanel(TileLoader.getNewPlayerCockRocketTile());
-  }
-
-  public void setupPlayerImagePanelPoop() {
-    setupPlayerImagePanel(TileLoader.getNewPlayerPoopTile());
-  }
-  
   public void setupPlayerImagePanel() {
     setupPlayerImagePanel(TileLoader.getNewPlayerTile());
+  }
+  
+  public void changePlayerIcon(String iconFileName) {
+    setupPlayerImagePanel(TileLoader.loadTile(iconFileName, DrawType.STRETCH));
   }
   
   private void setupPlayerImagePanel(ImageIcon icon) {

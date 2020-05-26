@@ -26,6 +26,7 @@ public class WorldMapView extends JTable {
   private Object[] columnNames;
   private WorldMap worldMap;
   private DefaultTableModel model;
+  private WorldMapKeyboardEventListener keyListener;
 
   public WorldMapView(UI ui, WorldMap worldMap) {
     super();
@@ -101,8 +102,8 @@ public class WorldMapView extends JTable {
   }
 
   private void setupKeyboardListener() {
-    KeyListener listener = new WorldMapKeyboardEventListener(this);
-    addKeyListener(listener);
+    keyListener = new WorldMapKeyboardEventListener(this);
+    addKeyListener(keyListener);
   }
 
   public WorldMap getWorldMap() {
@@ -111,5 +112,11 @@ public class WorldMapView extends JTable {
 
   public UI getUi() {
     return ui;
+  }
+  
+  @Override
+  public void resetKeyboardActions() {
+    super.resetKeyboardActions();
+    keyListener.reset();
   }
 }

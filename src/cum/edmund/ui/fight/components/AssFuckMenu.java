@@ -1,9 +1,6 @@
 package cum.edmund.ui.fight.components;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
-import javax.swing.JLabel;
 
 /**
  * Represents a menu. Used by {@link ActionsPanel}
@@ -14,38 +11,24 @@ import javax.swing.JLabel;
 public class AssFuckMenu {
   private final String name;
   private final Runnable task;
-  private final Map<AssFuckMenu, JLabel> children;
   private String couldPerform;
   private String isPerforming;
   private String hasPerformed;
+  private String iconFilename;
+  private int duration;
 
   public AssFuckMenu(String name, Runnable task) {
     this.name = name;
     this.task = task;
-    children = new HashMap<>();
-  }
-
-  public void addChild(AssFuckMenu menu) {
-    JLabel menuLabel = new JLabel(menu.getName());
-    children.put(menu, menuLabel);
-  }
-
-  public Map<AssFuckMenu, JLabel> getChildren() {
-    return children;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void select() {
-    task.run();
+    
+    // 2.5 seconds by default
+    this.duration = 2500;
   }
 
   public String couldPerform() {
     return Optional.ofNullable(couldPerform).orElse("Perform " + name + "...");
   }
-
+  
   public String isPerforming() {
     return Optional.ofNullable(isPerforming).orElse("Hero is performing " + name + "...");
   }
@@ -53,4 +36,30 @@ public class AssFuckMenu {
   public String hasPerformed() {
     return Optional.ofNullable(hasPerformed).orElse("Select an action");
   }
+
+  public void select() {
+    task.run();
+  }
+
+  public String getIconFilename() {
+    return iconFilename;
+  }
+
+  public void setIconFilename(String iconFilename) {
+    this.iconFilename = iconFilename;
+  }
+
+  public int getDuration() {
+    return duration;
+  }
+
+  public void setDuration(int duration) {
+    this.duration = duration;
+  }
+
+  public String getName() {
+    return name;
+  }
+  
+
 }
