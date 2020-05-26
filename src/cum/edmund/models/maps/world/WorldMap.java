@@ -8,6 +8,7 @@ import cum.edmund.core.Configuration;
 import cum.edmund.helpers.WalkHelper;
 import cum.edmund.models.blocks.Barrier;
 import cum.edmund.models.blocks.House;
+import cum.edmund.models.blocks.Mountian;
 import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.characters.hero.Hero;
@@ -106,6 +107,8 @@ public class WorldMap extends SparseMatrix<WorldMapElement> {
       return TileLoader.getTile(TileType.HOUSE, observer);
     } else if (element.getBarrier() instanceof Enemies) {
       return TileLoader.getTile(TileType.ENEMY, observer);
+    } else if (element.getBarrier() instanceof Mountian) {
+      return TileLoader.getTile(TileType.MOUNTAIN, observer);
     } else {
       throw new RuntimeException("what the fuck tile is this?");
     }

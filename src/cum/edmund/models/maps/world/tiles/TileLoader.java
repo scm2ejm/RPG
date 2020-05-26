@@ -1,8 +1,5 @@
 package cum.edmund.models.maps.world.tiles;
 
-import java.awt.Component;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.image.ImageObserver;
 import java.net.URL;
 import java.util.Map;
@@ -30,10 +27,12 @@ public class TileLoader {
     loadTile(TileType.ENEMY, "cat.gif", DrawType.STRETCH);
     loadTile(TileType.HOUSE, "house.png", DrawType.STRETCH);
     loadTile(TileType.HAND, "hand2.png", DrawType.STRETCH);
+    loadTile(TileType.MOUNTAIN, "mountian.png", DrawType.STRETCH);
+    
   }
 
   public enum TileType {
-    GRASS, PLAYER, ENEMY, HOUSE, HAND
+    GRASS, PLAYER, ENEMY, HOUSE, HAND, MOUNTAIN
   };
 
   public enum DrawType {
@@ -56,6 +55,14 @@ public class TileLoader {
     return new StretchIcon(ClassLoader.getSystemResource("walk.gif"));
   }
 
+  public static ImageIcon getNewPlayerPoopTile() {
+    return new StretchIcon(ClassLoader.getSystemResource("poop.gif"));
+  }
+  
+  public static ImageIcon getNewPlayerCockRocketTile() {
+    return new StretchIcon(ClassLoader.getSystemResource("cockrocket.gif"));
+  }
+  
   public static ImageIcon getNewEnemyTile() {
     return new StretchIcon(ClassLoader.getSystemResource("cat.gif"));
   }

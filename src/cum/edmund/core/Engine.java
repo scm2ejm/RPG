@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import cum.edmund.helpers.EnemiesHelper;
 import cum.edmund.models.blocks.House;
+import cum.edmund.models.blocks.Mountian;
 import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.models.characters.PlayableCharacter;
 import cum.edmund.models.characters.hero.Hero;
@@ -22,6 +23,17 @@ public class Engine {
     setWorldMap(new WorldMap(fucker));
 
     // TODO REMOVE THESE TEST OBJECTS
+    for (int i = 5; i >-5;i--) {
+      getWorldMap().put(new Mountian(new Coord(i, 3)));  
+    }
+    getWorldMap().put(new Mountian(new Coord(5, 3)));
+    getWorldMap().put(new Mountian(new Coord(5, 3)));
+    getWorldMap().put(new Mountian(new Coord(5, 2)));
+    getWorldMap().put(new Mountian(new Coord(5, 1)));
+    getWorldMap().put(new Mountian(new Coord(5, 0)));
+    getWorldMap().put(new Mountian(new Coord(5, -1)));
+    getWorldMap().put(new Mountian(new Coord(5, -3)));
+    
     getWorldMap().put(new House("Fuckers house", new Coord(4, 2)));
     getWorldMap().put(EnemiesHelper.createButtasaurusAss(4, new Coord(-2, -2)));
   }

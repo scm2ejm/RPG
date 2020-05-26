@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import cum.edmund.models.maps.world.tiles.TileLoader;
 import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
 import cum.edmund.ui.UI;
+import cum.edmund.ui.fight.FightView;
 
 /**
  * Represents the menu in a fight. Eg Fight, Item, etc
@@ -31,16 +32,18 @@ public class ActionsPanel extends JPanel {
   private static final Logger LOGGER = LoggerFactory.getLogger(ActionsPanel.class);
 
   private final UI ui;
+  private final FightView fightView;
   private int selectedItem;
   private List<JLabel> arrows;
   private List<AssFuckMenu> menuItems;
 
 
-  public ActionsPanel(UI ui) {
+  public ActionsPanel(UI ui, FightView fightView) {
     super(new GridBagLayout());
 
     this.ui = ui;
-    
+    this.fightView = fightView;
+
     Border border = BorderFactory.createLineBorder(Color.WHITE, 5, true);
     Border margin = new EmptyBorder(5, 5, 5, 5);
     Border withOuterMargin = new CompoundBorder(margin, border);
@@ -72,18 +75,54 @@ public class ActionsPanel extends JPanel {
     Map<String, Runnable> menu = new LinkedHashMap<>();
     menu.put("Butt Attack", () -> LOGGER.error("Butt attack"));
     menu.put("Wiener Attack", () -> LOGGER.error("Wiener Attack"));
+    menu.put("Heart Attack", () -> LOGGER.error("Another Wiener Attack"));
     menu.put("back", () -> renderMenu(topMenu()));
     return menu;
   }
-  
+
   private Map<String, Runnable> magicMenu() {
     Map<String, Runnable> menu = new LinkedHashMap<>();
-    menu.put("Jizz", () -> LOGGER.error("Jizz attack"));
-    menu.put("Explosivo Diarrhea", () -> LOGGER.error("Explosivo Diarrhea Attack"));
+    menu.put("Plasma Jizz", () -> LOGGER.error("Plasma Jizz attack"));
+    menu.put("Yellow Snow", () -> LOGGER.error("Yellow Snow attack"));
+    menu.put("Mikey's Cock Rocket", () -> {
+      fightView.setupPlayerImagePanelCockRocket();
+
+      AssFuckMenu thisMenu = menuItems.get(selectedItem);
+      fightView.showText(thisMenu.couldPerform());
+
+      new java.util.Timer().schedule(new java.util.TimerTask() {
+        @Override
+        public void run() {
+          fightView.setupPlayerImagePanel();
+          
+          AssFuckMenu stuff = menuItems.get(selectedItem);
+          fightView.showText(stuff.hasPerformed());
+        }
+      }, 2500);
+    });
+
+
+    menu.put("Explosivo Diarrhea", () -> {
+      fightView.setupPlayerImagePanelPoop();
+
+      AssFuckMenu thisMenu = menuItems.get(selectedItem);
+      fightView.showText(thisMenu.couldPerform());
+      
+      new java.util.Timer().schedule(new java.util.TimerTask() {
+        @Override
+        public void run() {
+          fightView.setupPlayerImagePanel();
+          
+          AssFuckMenu stuff = menuItems.get(selectedItem);
+          fightView.showText(stuff.hasPerformed());
+        }
+      }, 5000);
+    });
+
     menu.put("back", () -> renderMenu(topMenu()));
     return menu;
   }
-  
+
   private Map<String, Runnable> itemMenu() {
     Map<String, Runnable> menu = new LinkedHashMap<>();
     menu.put("Mints", () -> LOGGER.error("Mints"));
@@ -147,6 +186,9 @@ public class ActionsPanel extends JPanel {
       selectedItem--;
     }
     drawArrows();
+    
+    AssFuckMenu menu = menuItems.get(selectedItem);
+    fightView.showText(menu.couldPerform());
   }
 
   public void downPressed() {
@@ -154,6 +196,10 @@ public class ActionsPanel extends JPanel {
       selectedItem++;
     }
     drawArrows();
+
+    AssFuckMenu menu = menuItems.get(selectedItem);
+    fightView.showText(menu.couldPerform());
+
   }
 
   public void enterPressed() {

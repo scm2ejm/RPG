@@ -2,7 +2,7 @@ package cum.edmund.ui.fight.components;
 
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.Optional;
 import javax.swing.JLabel;
 
 /**
@@ -15,13 +15,14 @@ public class AssFuckMenu {
   private final String name;
   private final Runnable task;
   private final Map<AssFuckMenu, JLabel> children;
+  private String couldPerform;
+  private String isPerforming;
+  private String hasPerformed;
 
   public AssFuckMenu(String name, Runnable task) {
     this.name = name;
     this.task = task;
     children = new HashMap<>();
-
-    // setForeground(Color.WHITE);
   }
 
   public void addChild(AssFuckMenu menu) {
@@ -39,5 +40,17 @@ public class AssFuckMenu {
 
   public void select() {
     task.run();
+  }
+
+  public String couldPerform() {
+    return Optional.ofNullable(couldPerform).orElse("Perform " + name + "...");
+  }
+
+  public String isPerforming() {
+    return Optional.ofNullable(isPerforming).orElse("Hero is performing " + name + "...");
+  }
+  
+  public String hasPerformed() {
+    return Optional.ofNullable(hasPerformed).orElse("Select an action");
   }
 }

@@ -7,7 +7,6 @@ import java.awt.FontMetrics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.swing.BorderFactory;
@@ -35,6 +34,8 @@ public class FightView extends JPanel {
 
   private ActionsPanel actionsPanel;
   private JPanel playerStatsPanel;
+  private JLabel playerImageLabel;
+  private JTextPane notificationsPane;
 
   public FightView(UI ui, List<FightableCharacter> players, Enemies enemies) {
     super(new GridBagLayout());
@@ -61,12 +62,37 @@ public class FightView extends JPanel {
     setupPlayerStatsPanel();
 
     setupActionsPanel();
+    
+    setupNotificationsPanel();
 
     setupPlayerImagePanel();
 
     setupEnemyImagePanel();
 
     addKeyListener(new FightViewKeyboardEventListener(this));
+  }
+
+  private void setupNotificationsPanel() {
+    GridBagConstraints c = new GridBagConstraints();
+    c.gridx = 0;
+    c.gridy = 2;
+    c.fill = GridBagConstraints.HORIZONTAL;
+    c.weightx = 1;
+    c.weighty = 0.1;
+    c.anchor = GridBagConstraints.SOUTH;
+
+    notificationsPane = new JTextPane();
+    notificationsPane.setForeground(Color.WHITE);
+    notificationsPane.setBackground(Color.BLACK);
+    Font font = new Font(Font.MONOSPACED, 1, 15);
+    notificationsPane.setFont(font);
+    notificationsPane.setText("Waiting for action...");
+
+    FontMetrics fontMetrics = notificationsPane.getFontMetrics(font);
+
+    int width = fontMetrics.stringWidth(notificationsPane.getText());
+
+    add(notificationsPane, c);
   }
 
   private void setupEnemyStatsText() {
@@ -91,8 +117,20 @@ public class FightView extends JPanel {
 
     add(enemyStatsText, c);
   }
+  
+  public void setupPlayerImagePanelCockRocket() {
+    setupPlayerImagePanel(TileLoader.getNewPlayerCockRocketTile());
+  }
 
-  private void setupPlayerImagePanel() {
+  public void setupPlayerImagePanelPoop() {
+    setupPlayerImagePanel(TileLoader.getNewPlayerPoopTile());
+  }
+  
+  public void setupPlayerImagePanel() {
+    setupPlayerImagePanel(TileLoader.getNewPlayerTile());
+  }
+  
+  private void setupPlayerImagePanel(ImageIcon icon) {
     GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
     c.gridx = 0;
@@ -101,12 +139,16 @@ public class FightView extends JPanel {
     c.weighty = 1;
     c.anchor = GridBagConstraints.NORTHWEST;
 
-    ImageIcon icon = TileLoader.getNewPlayerTile();
-    JLabel label = new JLabel(icon);
+    if (playerImageLabel != null) {
+      playerImageLabel.removeAll();
+      playerImageLabel.setIcon(icon);
+    } else {
+      playerImageLabel = new JLabel(icon);
+    }
     icon.setImageObserver(ui);
-    label.setVisible(true);
+    playerImageLabel.setVisible(true);
 
-    add(label, c);
+    add(playerImageLabel, c);
 
   }
 
@@ -203,7 +245,7 @@ public class FightView extends JPanel {
   }
 
   private void setupActionsPanel() {
-    actionsPanel = new ActionsPanel(ui);
+    actionsPanel = new ActionsPanel(ui, this);
 
     GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
@@ -222,6 +264,10 @@ public class FightView extends JPanel {
 
   public JPanel getPlayerStatsPanel() {
     return playerStatsPanel;
+  }
+  
+  public void showText(String text) {
+    notificationsPane.setText(text);
   }
 
 }

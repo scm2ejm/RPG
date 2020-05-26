@@ -1,12 +1,14 @@
 package cum.edmund.ui.worldmap;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
-
 import cum.edmund.core.Configuration;
 import cum.edmund.models.maps.world.WorldMap;
 import cum.edmund.ui.UI;
@@ -38,8 +40,26 @@ public class WorldMapView extends JTable {
     setEnabled(true);
     setPreferredScrollableViewportSize(getPreferredSize());
     setupKeyboardListener();
+    setIntercellSpacing(new Dimension(0,0));
+    setShowGrid(false);
+    setShowVerticalLines(false);
+    setShowHorizontalLines(false);
+    setRowMargin(0);
+    setColumnModel(new CustomDefaultTableColumnModel());
+    setCellSelectionEnabled(false);
+    setBackground(Color.LIGHT_GRAY);
+    setColumnSelectionAllowed(false);
+    setRowSelectionAllowed(false);
+    setColumnSelectionAllowed(false);
+    setBorder(new EmptyBorder(0, 0, 0, 0));
+
   }
 
+  @Override
+  public boolean editCellAt(int row, int column, java.util.EventObject e) {
+    return false;
+ }
+  
   @Override
   public Class<?> getColumnClass(int column) {
     Object value = getValueAt(0, column);
@@ -53,6 +73,18 @@ public class WorldMapView extends JTable {
 
     return new DefaultTableModel(data, columnNames);
   }
+  
+  private class CustomDefaultTableColumnModel extends DefaultTableColumnModel{
+
+    @Override
+    public void setColumnMargin(int newMargin) {
+       //Always set ColumnMargin to zero.
+       //Because after the column data binding its internally set one as ColumnMargin.
+      //That course to paint white color grid.
+      //To stop we override the setColumnMargin and pass zero to ColumnMargin.
+     super.setColumnMargin(0);
+     }
+   }
 
   private Object[] columnNames() {
     List<String> columnNames = new ArrayList<>();
