@@ -3,10 +3,8 @@ package cum.edmund.models.characters.enemies;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import cum.edmund.models.WorldObjectType;
 import cum.edmund.models.blocks.Barrier;
-import cum.edmund.models.map.Coord;
 
 
 /**
@@ -17,8 +15,8 @@ import cum.edmund.models.map.Coord;
  *
  */
 public class Enemies extends Barrier {
-  public Enemies(Coord position) {
-    super("Enemies", WorldObjectType.ENEMIES, position);
+  public Enemies() {
+    super("Enemies", WorldObjectType.ENEMIES, "cat.gif");
   }
 
   private List<FightableNPC> frontRow = Collections.synchronizedList(new ArrayList<>());

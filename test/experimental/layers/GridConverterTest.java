@@ -2,7 +2,7 @@ package experimental.layers;
 
 import static org.junit.Assert.assertEquals;
 import org.junit.Test;
-import cum.edmund.newui.utils.GridConverter;
+import cum.edmund.ui.utils.GridConverter;
 
 public class GridConverterTest {
 

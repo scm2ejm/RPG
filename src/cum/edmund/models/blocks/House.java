@@ -1,7 +1,6 @@
 package cum.edmund.models.blocks;
 
 import cum.edmund.models.WorldObjectType;
-import cum.edmund.models.map.Coord;
 
 /**
  * Model of an in-game house
@@ -11,8 +10,12 @@ import cum.edmund.models.map.Coord;
  */
 public class House extends Barrier {
 
-  public House(String name, Coord position) {
-    super(name, WorldObjectType.HOUSE, position);
+  public House() {
+    super("Default house", WorldObjectType.HOUSE, "house.png");
+  }
+
+  public House(String name) {
+    super(name, WorldObjectType.HOUSE, "house.png");
   }
 
 }

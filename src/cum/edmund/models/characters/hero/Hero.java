@@ -4,7 +4,6 @@ import cum.edmund.models.WorldObjectType;
 import cum.edmund.models.characters.CharacterAttributes;
 import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.models.characters.PlayableCharacter;
-import cum.edmund.models.map.Coord;
 
 public class Hero extends FightableCharacter implements PlayableCharacter {
 
@@ -16,8 +15,8 @@ public class Hero extends FightableCharacter implements PlayableCharacter {
   private static final int DEFAULT_HP = 100;
   private static final int DEFAULT_MP = 0;
 
-  public Hero(String name, int x, int y) {
-    super(name, WorldObjectType.HERO, new Coord(x, y));
+  public Hero(String name) {
+    super(name, WorldObjectType.HERO, "walk.gif");
   }
 
   @Override

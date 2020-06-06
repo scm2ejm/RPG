@@ -1,23 +1,26 @@
 package cum.edmund.helpers;
 
+import java.math.RoundingMode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import cum.edmund.models.WorldObject;
 import cum.edmund.models.characters.Character;
 import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.map.Coord;
 import cum.edmund.models.maps.world.WalkOutcome;
 import cum.edmund.models.maps.world.WorldMap;
-import cum.edmund.models.maps.world.WorldMapElement;
+import cum.edmund.ui.utils.GridConverter;
 
+/**
+ * Helper utility regarding moving a player around the world map
+ * 
+ * @author Ed
+ *
+ */
 public class WalkHelper {
 
-  private static final Logger LOGGER;
-
-  static {
-    LOGGER = LoggerFactory.getLogger(WalkHelper.class);
-  }
+  private static final Logger LOGGER = LoggerFactory.getLogger(WalkHelper.class);
 
   /**
    * Makes the character walk in a direct
@@ -25,41 +28,46 @@ public class WalkHelper {
    * @param direction
    * @return true if successful, false if unable to walk in that direction
    */
-  public static WalkOutcome walk(Character character, Direction direction, WorldMap map) {
-    Coord oldPosition = character.getPosition();
-    Coord newPosition = adjacentPosition(oldPosition, direction);
+  public static WalkOutcome walk(Character character, Direction direction,
+      WorldMap characterWorldMap, WorldMap blockersWorldMap) {
+    Coord oldPositionFine = characterWorldMap.get(character);
+    Coord newPositionFine = adjacentPosition(oldPositionFine, direction);
+    Coord newPositionCoarse = GridConverter.fineToCoarse(newPositionFine, RoundingMode.UP);
 
-    WorldMapElement adjacentElement = map.get(newPosition);
+    WorldObject adjacentElement = blockersWorldMap.get(newPositionCoarse);
 
     boolean success;
 
     if (adjacentElement == null) {
       success = true;
     } else {
-      success = adjacentElement.getBarrier() == null;
+      success = !adjacentElement.isBarrier();
     }
 
     if (success) {
-      character.setPosition(newPosition);
-      LOGGER.debug("{} walks {}. New position is {}", character.getName(), direction, newPosition);
+      characterWorldMap.put(newPositionFine, character);
+      LOGGER.debug("{} walks {}. New position is (fine) {}", character.getName(), direction,
+          newPositionFine);
     } else {
-      newPosition = oldPosition;
-      LOGGER.debug("{} cannot walk {}, the path is blocked. New position is {}",
-          character.getName(), direction, newPosition);
+      newPositionFine = oldPositionFine;
+      LOGGER.debug("{} cannot walk {}, the path is blocked. New position is (fine) {}",
+          character.getName(), direction, newPositionFine);
     }
 
-    Enemies enemies = closeEnemies(character, map);
+    Enemies enemies = closeEnemies(character, characterWorldMap, blockersWorldMap);
 
-    return new WalkOutcome(success, enemies, newPosition, adjacentElement);
+    return new WalkOutcome(success, enemies, newPositionFine, adjacentElement);
   }
 
   /**
    * Used to look for enemies in immediate area
    */
-  private static Enemies closeEnemies(Character fucker, WorldMap map) {
+  private static Enemies closeEnemies(Character fucker, WorldMap characterWorldMap,
+      WorldMap blockersLayer) {
 
-    int xCentre = fucker.getPosition().getX();
-    int yCentre = fucker.getPosition().getY();
+    Coord playerLocation = GridConverter.fineToCoarse(characterWorldMap.get(fucker));
+    int xCentre = playerLocation.getX();
+    int yCentre = playerLocation.getY();
 
     for (int yOffset = 1; yOffset >= -1; yOffset--) {
 
@@ -69,11 +77,11 @@ public class WalkHelper {
 
         int xCurrent = xCentre + xOffset;
 
-        WorldMapElement element = map.get(xCurrent, yCurrent);
+        WorldObject element = blockersLayer.get(xCurrent, yCurrent);
 
-        if (element != null && element.getEnemies() != null) {
+        if (element instanceof Enemies) {
           // Found adjacent enemies
-          return element.getEnemies();
+          return (Enemies) element;
         }
       }
 
@@ -91,17 +99,17 @@ public class WalkHelper {
       case EAST:
         return new Coord(x + 1, y);
       case NORTH:
-        return new Coord(x, y + 1);
-      case NORTH_EAST:
-        return new Coord(x + 1, y + 1);
-      case NORTH_WEST:
-        return new Coord(x - 1, y + 1);
-      case SOUTH:
         return new Coord(x, y - 1);
-      case SOUTH_EAST:
+      case NORTH_EAST:
         return new Coord(x + 1, y - 1);
-      case SOUTH_WEST:
+      case NORTH_WEST:
         return new Coord(x - 1, y - 1);
+      case SOUTH:
+        return new Coord(x, y + 1);
+      case SOUTH_EAST:
+        return new Coord(x + 1, y + 1);
+      case SOUTH_WEST:
+        return new Coord(x - 1, y + 1);
       case WEST:
         return new Coord(x - 1, y);
       default:

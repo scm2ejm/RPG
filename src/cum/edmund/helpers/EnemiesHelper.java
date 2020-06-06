@@ -2,7 +2,6 @@ package cum.edmund.helpers;
 
 import cum.edmund.models.characters.enemies.ButtasaurusAss;
 import cum.edmund.models.characters.enemies.Enemies;
-import cum.edmund.models.map.Coord;
 
 /**
  * Helper class for creating new enemies
@@ -11,11 +10,11 @@ import cum.edmund.models.map.Coord;
  *
  */
 public class EnemiesHelper {
-  public static Enemies createButtasaurusAss(int enemiesToCreate, Coord position) {
-    Enemies enemies = new Enemies(position);
+  public static Enemies createButtasaurusAss(int enemiesToCreate) {
+    Enemies enemies = new Enemies();
 
     for (int i = 0; i < enemiesToCreate; i++) {
-      enemies.add(new ButtasaurusAss(position));
+      enemies.add(new ButtasaurusAss());
     }
 
     return enemies;

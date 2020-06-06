@@ -4,9 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-
 import org.junit.Test;
-
 import cum.edmund.helpers.EnemiesHelper;
 import cum.edmund.helpers.WalkHelper;
 import cum.edmund.models.blocks.House;
@@ -14,6 +12,7 @@ import cum.edmund.models.characters.Direction;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.characters.hero.Hero;
 import cum.edmund.models.map.Coord;
+import cum.edmund.models.maps.world.CharacterWorldMap;
 import cum.edmund.models.maps.world.WalkOutcome;
 import cum.edmund.models.maps.world.WorldMap;
 
@@ -24,7 +23,7 @@ public class WorldMapWalkTest {
     Hero fucker = new Hero("fucker", 0, 0);
 
     // Create world map
-    WorldMap map = new WorldMap(fucker);
+    WorldMap map = new CharacterWorldMap(fucker);
 
     House house = new House("fucker's house", new Coord(-2, 0));
     map.put(house);
@@ -35,6 +34,11 @@ public class WorldMapWalkTest {
     assertFalse(outcome.isFight());
     assertEquals(new Coord(-1, 0), outcome.getNewPosition());
     assertEquals(new Coord(-1, 0), fucker.getPosition());
+
+    // The house is (-2, 0) fine which is (-10, 0) coarse
+    while (fucker.getPosition().getX() > -9) {
+      outcome = WalkHelper.walk(fucker, Direction.WEST, map);
+    }
 
     // this should fail (house in way)
     outcome = WalkHelper.walk(fucker, Direction.WEST, map);
@@ -50,7 +54,7 @@ public class WorldMapWalkTest {
     Hero fucker = new Hero("fucker", 0, 0);
 
     // Create world map
-    WorldMap map = new WorldMap(fucker);
+    WorldMap map = new CharacterWorldMap(fucker);
 
     Enemies enemies = EnemiesHelper.createButtasaurusAss(2, new Coord(4, 0));
     map.put(enemies);

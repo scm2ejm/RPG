@@ -1,86 +1,60 @@
 package cum.edmund.ui;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import cum.edmund.core.Engine;
 import cum.edmund.models.characters.enemies.Enemies;
-import cum.edmund.models.map.Coord;
 import cum.edmund.ui.fight.FightView;
-import cum.edmund.ui.worldmap.WorldMapView;
+import cum.edmund.ui.worldmap.WorldMapPanel;
 
 /**
- * Basic tile-based UI for Return To Assfuck Castle
+ * Main executable for starting game running
  * 
  * @author Ed
  *
  */
-@SuppressWarnings("serial")
 public class UI extends JFrame {
 
   private Engine engine;
-  private WorldMapView worldMapView;
-  private FightView fightView;
-
-  public UI() {
-    super("Return to AssFuck Castle");
-    setupFrame();
-
-    engine = new Engine();
-
-    setupWorldMapView();
-
-    // Draw stuff
-    validate();
-
-
-  }
-
-  private void setupWorldMapView() {
-
-    worldMapView = new WorldMapView(this, engine.getWorldMap());
-
-    getContentPane().add(worldMapView);
-
-    // Set table resizer. Must be done after adding to Content Pane
-    worldMapView.getParent().addComponentListener(new AssFuckTableResizer(worldMapView));
-
-    worldMapView.setVisible(true);
-    worldMapView.grabFocus();
-    worldMapView.drawThings();
-    worldMapView.getParent().setSize(200, 200);
-
-  }
-
-  private void setupFrame() {
-    setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-    // setSize(200, 200);
-    setVisible(true);
-    setFocusable(true);
-    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-  }
+  private JPanel worldMap;
 
   public static void main(String[] args) {
     new UI();
   }
 
-  public void showFightView() {
-    fightView = new FightView(this, engine.entourage(), new Enemies(new Coord(1, 1)));
+  private UI() {
+    super("Return to AssFuck Castle");
+
+    engine = new Engine();
+    worldMap = new WorldMapPanel(this, engine);
+    showWorldMapView();
+
+    setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    setVisible(true);
+  }
+
+  public void createFightView() {
+    FightView fightView = new FightView(this, engine.entourageFighters(), new Enemies());
     getContentPane().removeAll();
     getContentPane().add(fightView);
 
     fightView.showFightPanel();
 
-    fightView.revalidate();
-    fightView.grabFocus();
+    directInputEventsTo(worldMap);
   }
 
   public void showWorldMapView() {
     getContentPane().removeAll();
-    getContentPane().add(worldMapView);
+    getContentPane().add(worldMap);
 
-    worldMapView.revalidate();
-    worldMapView.grabFocus();
-    worldMapView.resetKeyboardActions();
+    directInputEventsTo(worldMap);
+  }
+
+  private void directInputEventsTo(JPanel worldMap2) {
+    // TODO Auto-generated method stub
+
   }
 
 }

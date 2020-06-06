@@ -1,8 +1,13 @@
 package cum.edmund.models.characters.enemies;
 
 import cum.edmund.models.characters.CharacterAttributes;
-import cum.edmund.models.map.Coord;
 
+/**
+ * First encountered enemy
+ * 
+ * @author Ed
+ *
+ */
 public class ButtasaurusAss extends FightableNPC {
 
   private static final int DEFAULT_PHYSICAL_STRENGTH = 50;
@@ -13,12 +18,8 @@ public class ButtasaurusAss extends FightableNPC {
   private static final int DEFAULT_HP = 50;
   private static final int DEFAULT_MP = 0;
 
-  public ButtasaurusAss(int x, int y) {
-    super("Buttasaurus Ass", new Coord(x, y));
-  }
-
-  public ButtasaurusAss(Coord position) {
-    super("Buttasaurus Ass", position);
+  public ButtasaurusAss() {
+    super("Buttasaurus Ass", "cat.gif");
   }
 
   @Override

@@ -2,22 +2,22 @@ package cum.edmund.models.characters;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import cum.edmund.models.WorldObjectType;
-import cum.edmund.models.map.Coord;
 
+/**
+ * Represents a playable or non-playable character who take part in a fight
+ * 
+ * @author Ed
+ *
+ */
 public abstract class FightableCharacter extends Character {
 
-  private static final Logger LOGGER;
+  private static final Logger LOGGER = LoggerFactory.getLogger(FightableCharacter.class);
 
   private CharacterAttributes characterAttributes;
 
-  static {
-    LOGGER = LoggerFactory.getLogger(FightableCharacter.class);
-  }
-
-  public FightableCharacter(String name, WorldObjectType type, Coord position) {
-    super(name, type, position);
+  public FightableCharacter(String name, WorldObjectType type, String imageFilename) {
+    super(name, type, imageFilename);
 
     buildCharacterAttributes();
   }

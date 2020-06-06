@@ -2,7 +2,6 @@ package cum.edmund.models.blocks;
 
 import cum.edmund.models.WorldObject;
 import cum.edmund.models.WorldObjectType;
-import cum.edmund.models.map.Coord;
 
 /**
  * Model of an barrier that cannot be walked past, such as a wall
@@ -10,13 +9,11 @@ import cum.edmund.models.map.Coord;
  * @author Ed
  *
  */
-public class Barrier extends WorldObject {
+public abstract class Barrier extends WorldObject {
+  public Barrier(String name, WorldObjectType type, String imageFilename) {
+    super(name, type, imageFilename);
 
-  public Barrier(Coord position) {
-    super("Barrier", WorldObjectType.BARRIER, position);
-  }
-
-  public Barrier(String name, WorldObjectType type, Coord position) {
-    super(name, type, position);
+    // All extending classes cannot be walked through
+    setBarrier(true);
   }
 }
