@@ -1,0 +1,14 @@
+0, 0    (pixels)                            110,0  (pixels)
+-5,-5   (course map)                        5,-5   (course map)
+-16,-16 (fine map)                          16,-16 (fine map)
+
+
+                   50, 50   (pixels)
+                   0, 0     (course map)
+                   0, 0     (fine map)
+
+
+
+0,110  (pixels)                             110,110 (pixels)
+-5,5   (course map)                         5,5     (course map)
+-16,16 (fine map)                           16,16   (fine map)
