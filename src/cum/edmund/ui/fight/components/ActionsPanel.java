@@ -16,6 +16,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import cum.edmund.core.Engine;
 import cum.edmund.models.maps.world.tiles.TileLoader;
 import cum.edmund.models.maps.world.tiles.TileLoader.TileType;
 import cum.edmund.ui.UI;
@@ -39,7 +40,7 @@ public class ActionsPanel extends JPanel {
   private Timer timer;
 
 
-  public ActionsPanel(UI ui, FightView fightView) {
+  public ActionsPanel(UI ui, Engine engine, FightView fightView) {
     super(new GridBagLayout());
 
     this.ui = ui;
@@ -59,9 +60,6 @@ public class ActionsPanel extends JPanel {
     menuItems = new ArrayList<>();
 
     renderMenu(topMenu());
-
-
-
   }
 
   private List<AssFuckMenu> topMenu() {

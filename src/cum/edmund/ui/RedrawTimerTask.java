@@ -24,12 +24,6 @@ public class RedrawTimerTask implements ActionListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-
-    if (component instanceof PlayerLayer) {
-      PlayerLayer playerLayer = (PlayerLayer) component;
-      playerLayer.getGamePad().captureInput();
-    }
-
     component.repaint();
   }
 }

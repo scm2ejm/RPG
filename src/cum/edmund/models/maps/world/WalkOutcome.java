@@ -1,5 +1,6 @@
 package cum.edmund.models.maps.world;
 
+import java.util.Set;
 import cum.edmund.models.WorldObject;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.map.Coord;
@@ -14,22 +15,22 @@ import cum.edmund.models.map.Coord;
 public class WalkOutcome {
   private final boolean success;
   private final Enemies enemies;
-  private final WorldObject worldObject;
+  private final Set<WorldObject> worldObjects;
   private final Coord newPosition;
 
-  public WalkOutcome(boolean success, Enemies enemies, Coord newPosition, WorldObject element) {
+  public WalkOutcome(boolean success, Enemies enemies, Coord newPosition, Set<WorldObject> adjacentTiles) {
     this.success = success;
     this.enemies = enemies;
     this.newPosition = newPosition;
-    this.worldObject = element;
+    this.worldObjects = adjacentTiles;
   }
 
   public boolean isSuccess() {
     return success;
   }
 
-  public WorldObject getWorldObject() {
-    return worldObject;
+  public Set<WorldObject> getWorldObjects() {
+    return worldObjects;
   }
 
   public Coord getNewPosition() {

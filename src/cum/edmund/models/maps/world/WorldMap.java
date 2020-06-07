@@ -25,17 +25,17 @@ public class WorldMap {
   }
 
   public WorldObject get(int x, int y) {
-    return objectsByLocation.get(new Coord(x, y));
+    return get(new Coord(x, y));
   }
 
   public WorldObject get(Coord position) {
     return objectsByLocation.get(position);
   }
-  
+
   public Coord get(Character character) {
     return locationById.get(character.getId());
   }
-  
+
   public void put(int x, int y, WorldObject value) {
     put(new Coord(x, y), value);
   }

@@ -1,6 +1,7 @@
 package cum.edmund.helpers;
 
-import java.math.RoundingMode;
+import java.util.HashSet;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import cum.edmund.models.WorldObject;
@@ -32,16 +33,20 @@ public class WalkHelper {
       WorldMap characterWorldMap, WorldMap blockersWorldMap) {
     Coord oldPositionFine = characterWorldMap.get(character);
     Coord newPositionFine = adjacentPosition(oldPositionFine, direction);
-    Coord newPositionCoarse = GridConverter.fineToCoarse(newPositionFine, RoundingMode.UP);
 
-    WorldObject adjacentElement = blockersWorldMap.get(newPositionCoarse);
+    // Check all of the tiles that we would be covering if we made this move
+    boolean success = true;
+    Set<WorldObject> adjacentTiles = new HashSet<>();
+    for (Coord destination : GridConverter.fineToCoarseExactThing(newPositionFine)) {
+      WorldObject adjacentElement = blockersWorldMap.get(destination);
+      if (adjacentElement != null) {
+        adjacentTiles.add(adjacentElement);
 
-    boolean success;
-
-    if (adjacentElement == null) {
-      success = true;
-    } else {
-      success = !adjacentElement.isBarrier();
+        if (adjacentElement.isBarrier()) {
+          // This is a tile that we can't walk through
+          success = false;
+        }
+      }
     }
 
     if (success) {
@@ -54,39 +59,20 @@ public class WalkHelper {
           character.getName(), direction, newPositionFine);
     }
 
-    Enemies enemies = closeEnemies(character, characterWorldMap, blockersWorldMap);
+    Enemies enemies = closeEnemies(adjacentTiles);
 
-    return new WalkOutcome(success, enemies, newPositionFine, adjacentElement);
+    return new WalkOutcome(success, enemies, newPositionFine, adjacentTiles);
   }
 
   /**
    * Used to look for enemies in immediate area
    */
-  private static Enemies closeEnemies(Character fucker, WorldMap characterWorldMap,
-      WorldMap blockersLayer) {
-
-    Coord playerLocation = GridConverter.fineToCoarse(characterWorldMap.get(fucker));
-    int xCentre = playerLocation.getX();
-    int yCentre = playerLocation.getY();
-
-    for (int yOffset = 1; yOffset >= -1; yOffset--) {
-
-      int yCurrent = yCentre + yOffset;
-
-      for (int xOffset = -1; xOffset <= 1; xOffset++) {
-
-        int xCurrent = xCentre + xOffset;
-
-        WorldObject element = blockersLayer.get(xCurrent, yCurrent);
-
-        if (element instanceof Enemies) {
-          // Found adjacent enemies
-          return (Enemies) element;
-        }
+  private static Enemies closeEnemies(Set<WorldObject> adjacentTiles) {
+    for (WorldObject object : adjacentTiles) {
+      if (object instanceof Enemies) {
+        return (Enemies) object;
       }
-
     }
-
     return null;
   }
 

@@ -2,6 +2,8 @@ package cum.edmund.ui.layers.core;
 
 import java.awt.Graphics;
 import java.awt.Image;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.ImageIcon;
@@ -96,9 +98,11 @@ public abstract class AbstractLayer extends JPanel {
    * Creates a new image scaled according to the dimensions of parent container
    */
   private ImageIcon scaleImage(ImageIcon unscaledImage) {
-    return new ImageIcon(
-        unscaledImage.getImage().getScaledInstance(totalWidth / View.COARSE_GRID_SIZE,
-            totalHeight / View.COARSE_GRID_SIZE, Image.SCALE_DEFAULT));
+    BigDecimal gridSize = BigDecimal.valueOf(View.COARSE_GRID_SIZE);
+    BigDecimal newWidth = BigDecimal.valueOf(totalWidth).divide(gridSize, RoundingMode.UP);
+    BigDecimal newHeight = BigDecimal.valueOf(totalHeight).divide(gridSize, RoundingMode.UP);
+    return new ImageIcon(unscaledImage.getImage().getScaledInstance(newWidth.intValue(),
+        newHeight.intValue(), Image.SCALE_DEFAULT));
   }
 
   /**

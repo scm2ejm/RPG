@@ -1,5 +1,6 @@
 package cum.edmund.ui.layers;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
 import cum.edmund.audio.AudioEngine;
 import cum.edmund.core.Engine;
@@ -9,7 +10,6 @@ import cum.edmund.models.maps.world.WorldMap;
 import cum.edmund.ui.UI;
 import cum.edmund.ui.View;
 import cum.edmund.ui.input.Controllable;
-import cum.edmund.ui.input.DefaultInputListener;
 import cum.edmund.ui.layers.core.AbstractLayer;
 import cum.edmund.ui.layers.core.Granularity;
 
@@ -27,25 +27,16 @@ public class PlayerLayer extends AbstractLayer implements Controllable {
 
   private final Engine engine;
 
-  private final DefaultInputListener gamePad;
-
   public PlayerLayer(View view, UI ui, Engine engine) {
     super(view, Granularity.FINE);
 
     this.view = view;
     this.ui = ui;
     this.engine = engine;
-    this.gamePad = new DefaultInputListener(this::handleKeyPress);
 
-    addKeyListener(gamePad);
     setFocusable(true);
     setFocusTraversalKeysEnabled(false);
-  }
-
-
-
-  public DefaultInputListener getGamePad() {
-    return gamePad;
+    addKeyListener(engine.getGamePad());
   }
 
   @Override
@@ -86,12 +77,17 @@ public class PlayerLayer extends AbstractLayer implements Controllable {
     if (outcome != null && outcome.isFight()) {
       AudioEngine.startFightBackgroundMusic();
 
-      ui.createFightView();
+      ui.createFightView(outcome.getEnemies());
     }
   }
 
   @Override
   protected WorldMap worldMap() {
     return engine.getCharacterWorldMap();
+  }
+
+  @Override
+  public Component listenComponent() {
+    return this;
   }
 }

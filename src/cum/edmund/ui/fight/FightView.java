@@ -17,6 +17,7 @@ import javax.swing.JTextPane;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import cum.edmund.core.Engine;
 import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.maps.world.tiles.TileLoader;
@@ -27,6 +28,7 @@ import cum.edmund.ui.fight.components.ActionsPanel;
 public class FightView extends JPanel {
 
   private final UI ui;
+  private final Engine engine;
   private final List<FightableCharacter> players;
   private final Enemies enemies;
 
@@ -38,10 +40,11 @@ public class FightView extends JPanel {
   private JLabel playerImageLabel;
   private JTextPane notificationsPane;
 
-  public FightView(UI ui, List<FightableCharacter> players, Enemies enemies) {
+  public FightView(UI ui, Engine engine, Enemies enemies) {
     super(new GridBagLayout());
     this.ui = ui;
-    this.players = players;
+    this.engine = engine;
+    this.players = engine.entourageFighters();
     this.enemies = enemies;
 
     allCharacters = new ArrayList<>();
@@ -54,6 +57,7 @@ public class FightView extends JPanel {
 
     setBackground(Color.GREEN);
     setVisible(true);
+    addKeyListener(engine.getGamePad());
   }
 
   public void showFightPanel() {
@@ -63,14 +67,12 @@ public class FightView extends JPanel {
     setupPlayerStatsPanel();
 
     setupActionsPanel();
-    
+
     setupNotificationsPanel();
 
     setupPlayerImagePanel();
 
     setupEnemyImagePanel();
-
-    addKeyListener(new FightViewKeyboardEventListener(this));
   }
 
   private void setupNotificationsPanel() {
@@ -118,15 +120,15 @@ public class FightView extends JPanel {
 
     add(enemyStatsText, c);
   }
-  
+
   public void setupPlayerImagePanel() {
     setupPlayerImagePanel(TileLoader.getNewPlayerTile());
   }
-  
+
   public void changePlayerIcon(String iconFileName) {
     setupPlayerImagePanel(TileLoader.loadTile(iconFileName, DrawType.STRETCH));
   }
-  
+
   private void setupPlayerImagePanel(ImageIcon icon) {
     GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
@@ -242,7 +244,7 @@ public class FightView extends JPanel {
   }
 
   private void setupActionsPanel() {
-    actionsPanel = new ActionsPanel(ui, this);
+    actionsPanel = new ActionsPanel(ui, engine, this);
 
     GridBagConstraints c = new GridBagConstraints();
     c.fill = GridBagConstraints.BOTH;
@@ -262,7 +264,7 @@ public class FightView extends JPanel {
   public JPanel getPlayerStatsPanel() {
     return playerStatsPanel;
   }
-  
+
   public void showText(String text) {
     notificationsPane.setText(text);
   }

@@ -1,34 +1,28 @@
 package cum.edmund.ui.layers;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import cum.edmund.models.maps.world.StretchIcon;
+import cum.edmund.core.Engine;
+import cum.edmund.models.maps.world.WorldMap;
+import cum.edmund.ui.View;
+import cum.edmund.ui.layers.core.AbstractLayer;
+import cum.edmund.ui.layers.core.Granularity;
 
-public class BackgroundLayer extends JPanel {
-  /**
-   * The layer for background tiles. I will possibly create a second background layer so that tiles
-   * overlap but this is TBD
-   * 
-   * @author Ed
-   */
-  public BackgroundLayer() {
-    setLayout(new GridBagLayout());
+/**
+ * Returns the main background layer (e.g. grass, path, etc)
+ * 
+ * @author Ed
+ *
+ */
+public class BackgroundLayer extends AbstractLayer {
 
-    StretchIcon grass = new StretchIcon(ClassLoader.getSystemResource("grass.png"), false);
+  private final Engine engine;
 
-    GridBagConstraints gbc = new GridBagConstraints();
-    gbc.fill = GridBagConstraints.BOTH;
-    gbc.weightx = 1;
-    gbc.weighty = 1;
+  public BackgroundLayer(View view, Engine engine) {
+    super(view, Granularity.COARSE);
+    this.engine = engine;
+  }
 
-    for (int x = 0; x < 11; x++) {
-      for (int y = 0; y < 11; y++) {
-        gbc.gridx = x;
-        gbc.gridy = y;
-        add(new JLabel(grass), gbc);
-      }
-    }
+  @Override
+  protected WorldMap worldMap() {
+    return engine.getTopBackgroundWorldMap();
   }
 }

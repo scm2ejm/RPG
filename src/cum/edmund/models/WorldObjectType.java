@@ -15,6 +15,8 @@ public enum WorldObjectType {
 
   ENEMIES,
 
-  BARRIER
+  BARRIER,
+
+  BACKGROUND
 
 }

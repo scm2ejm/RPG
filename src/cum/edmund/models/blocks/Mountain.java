@@ -8,9 +8,9 @@ import cum.edmund.models.WorldObjectType;
  * @author Ed
  *
  */
-public class Mountian extends Barrier {
+public class Mountain extends Barrier {
 
-  public Mountian() {
+  public Mountain() {
     super("Mountain", WorldObjectType.BARRIER, "mountian.png");
   }
 

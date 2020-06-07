@@ -6,6 +6,7 @@ import org.libsdl.SDL_Error;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.badlogic.gdx.controllers.Controller;
+import cum.edmund.core.Engine;
 import uk.co.electronstudio.sdl2gdx.SDL2ControllerManager;
 
 /**
@@ -18,18 +19,21 @@ public class DefaultInputListener extends AbstractInputListener {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DefaultInputListener.class);
 
+  private final Engine engine;
+
   /**
    * This is the thing that will process the event. E.g. move the character or whatever
    */
-  private final Controllable controllable;
+  private Controllable controllable;
 
   /**
    * This is the thing that captures gamepad input
    */
   private SDL2ControllerManager manager;
 
-  public DefaultInputListener(Controllable controllable) {
-    this.controllable = controllable;
+  public DefaultInputListener(Engine engine) {
+
+    this.engine = engine;
 
     // I have no idea what magic this does
     SDL.SDL_SetHint("SDL_XINPUT_ENABLED", "0");
@@ -72,6 +76,11 @@ public class DefaultInputListener extends AbstractInputListener {
    * This handles gamepad input
    */
   private void handleInput(int axisCode, float value) {
+    if (controllable == null) {
+      // No hook yet so aborting
+      return;
+    }
+
     if (Math.abs(value) < 0.1f) {
       // Input is small enough to fall in dead zone so ignoring it
       return;
@@ -105,7 +114,31 @@ public class DefaultInputListener extends AbstractInputListener {
    */
   @Override
   public void keyPressed(KeyEvent e) {
+    if (controllable == null) {
+      // No hook yet so aborting
+      return;
+    }
+
     controllable.handleKeyPress(e.getKeyCode());
+  }
+
+  public Controllable getControllable() {
+    return controllable;
+  }
+
+  public void setControllable(Controllable controllable) {
+    // Remove listener from old component
+    if (this.controllable != null) {
+      this.controllable.listenComponent().removeKeyListener(engine.getGamePad());
+    }
+
+    // Set the new controllable
+    this.controllable = controllable;
+
+    // Add listener to new component
+    if (this.controllable != null) {
+      this.controllable.listenComponent().addKeyListener(engine.getGamePad());
+    }
   }
 
 }

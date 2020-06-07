@@ -13,6 +13,9 @@ public abstract class FightableNPC extends FightableCharacter {
 
   public FightableNPC(String name, String imageFilename) {
     super(name, WorldObjectType.ENEMY, imageFilename);
+
+    // Do not allow characters to walk through other characters
+    setBarrier(true);
   }
 
 }

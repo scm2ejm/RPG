@@ -1,7 +1,8 @@
 package cum.edmund.ui.fight;
 
+import java.awt.Component;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import cum.edmund.ui.input.Controllable;
 
 /**
  * Processes keyboard events, eg makes the player walk when a directional button is pressed
@@ -9,7 +10,7 @@ import java.awt.event.KeyListener;
  * @author Ed
  *
  */
-public class FightViewKeyboardEventListener implements KeyListener {
+public class FightViewKeyboardEventListener implements Controllable {
 
   private FightView fightView;
 
@@ -18,20 +19,19 @@ public class FightViewKeyboardEventListener implements KeyListener {
   }
 
   @Override
-  public void keyTyped(KeyEvent e) {}
-
-  @Override
-  public void keyPressed(KeyEvent e) {
-    if (e.getKeyCode() == KeyEvent.VK_UP) {
+  public void handleKeyPress(int key) {
+    if (key == KeyEvent.VK_UP) {
       fightView.getActionsPanel().upPressed();
-    } else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+    } else if (key == KeyEvent.VK_DOWN) {
       fightView.getActionsPanel().downPressed();
-    } else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+    } else if (key == KeyEvent.VK_ENTER) {
       fightView.getActionsPanel().enterPressed();
     }
   }
 
-
   @Override
-  public void keyReleased(KeyEvent e) {}
+  public Component listenComponent() {
+    return fightView;
+  }
+
 }
