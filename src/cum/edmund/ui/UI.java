@@ -17,7 +17,7 @@ import cum.edmund.ui.worldmap.WorldMapPanel;
 public class UI extends JFrame {
 
   private final Engine engine;
-  private final WorldMapPanel worldMap;
+  private WorldMapPanel worldMap;
 
   public static void main(String[] args) {
     new UI();
@@ -28,7 +28,7 @@ public class UI extends JFrame {
 
     engine = new Engine();
     worldMap = new WorldMapPanel(this, engine);
-    showWorldMapView();
+    createWorldMapView();
 
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -37,27 +37,37 @@ public class UI extends JFrame {
 
   public void createFightView(Enemies enemies) {
     FightView fightView = new FightView(this, engine, enemies);
-    fightView.showFightPanel();
 
     getContentPane().removeAll();
     getContentPane().add(fightView);
+
+    fightView.showFightPanel();
     fightView.grabFocus();
+    setVisible(true);
 
     directInputEventsTo(new FightViewKeyboardEventListener(fightView));
   }
 
-  public void showWorldMapView() {
+  public void createWorldMapView() {
     getContentPane().removeAll();
     getContentPane().add(worldMap);
-    worldMap.grabFocus();
+    worldMap.listenComponent().grabFocus();
 
-    worldMap.removeKeyListener(engine.getGamePad());
-    worldMap.addKeyListener(engine.getGamePad());
     directInputEventsTo(worldMap);
   }
 
   private void directInputEventsTo(Controllable controllable) {
     engine.getGamePad().setControllable(controllable);
   }
+
+  public Engine getEngine() {
+    return engine;
+  }
+
+  public WorldMapPanel getWorldMap() {
+    return worldMap;
+  }
+  
+  
 
 }

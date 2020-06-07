@@ -57,7 +57,6 @@ public class FightView extends JPanel {
 
     setBackground(Color.GREEN);
     setVisible(true);
-    addKeyListener(engine.getGamePad());
   }
 
   public void showFightPanel() {

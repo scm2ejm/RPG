@@ -67,7 +67,7 @@ public class ActionsPanel extends JPanel {
     menu.add(new AssFuckMenu("Attack", () -> renderMenu(attackMenu())));
     menu.add(new AssFuckMenu("Magic", () -> renderMenu(magicMenu())));
     menu.add(new AssFuckMenu("Item", () -> renderMenu(itemMenu())));
-    menu.add(new AssFuckMenu("Fuck Off", () -> ui.showWorldMapView()));
+    menu.add(new FuckOffMenuItem(ui, fightView));
     return menu;
   }
 
@@ -171,7 +171,7 @@ public class ActionsPanel extends JPanel {
 
   public void enterPressed() {
 
-    // Cancel any futre timer actions
+    // Cancel any future timer actions
     timer.cancel();
 
     // Get the menu item
@@ -187,19 +187,22 @@ public class ActionsPanel extends JPanel {
     thisMenu.select();
 
     // Schedule the reset when it's complete
-    timer = new Timer();
-    timer.schedule(new TimerTask() {
-      @Override
-      public void run() {
-        // The action is complete so restore original player image
-        fightView.setupPlayerImagePanel();
+    if (thisMenu.getDuration() > 0) {
+      timer = new Timer();
+      timer.schedule(new TimerTask() {
+        @Override
+        public void run() {
+          // The action is complete so restore original player image
+          fightView.setupPlayerImagePanel();
 
-        fightView.showText(thisMenu.hasPerformed());
-      }
-    }, thisMenu.getDuration());
+          fightView.showText(thisMenu.hasPerformed());
+        }
+      }, thisMenu.getDuration());
 
-    // Redraw stuff
-    drawArrows();
+      // Redraw stuff
+      drawArrows();
+    }
+
   }
 
   private void drawArrows() {

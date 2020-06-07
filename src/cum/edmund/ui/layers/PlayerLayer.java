@@ -36,7 +36,6 @@ public class PlayerLayer extends AbstractLayer implements Controllable {
 
     setFocusable(true);
     setFocusTraversalKeysEnabled(false);
-    addKeyListener(engine.getGamePad());
   }
 
   @Override

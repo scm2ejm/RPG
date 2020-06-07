@@ -1,6 +1,5 @@
 package cum.edmund.ui.worldmap;
 
-import java.awt.Component;
 import cum.edmund.core.Engine;
 import cum.edmund.ui.MultilayeredPanel;
 import cum.edmund.ui.UI;
@@ -43,9 +42,10 @@ public class WorldMapPanel extends MultilayeredPanel implements Controllable {
     playerLayer.handleKeyPress(key);
   }
 
+  @SuppressWarnings("exports")
   @Override
-  public Component listenComponent() {
-    return this;
+  public PlayerLayer listenComponent() {
+    return playerLayer;
   }
 
 }
