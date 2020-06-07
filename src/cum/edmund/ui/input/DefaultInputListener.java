@@ -81,7 +81,7 @@ public class DefaultInputListener extends AbstractInputListener {
       return;
     }
 
-    if (Math.abs(value) < 0.1f) {
+    if (Math.abs(value) < 0.5f) {
       // Input is small enough to fall in dead zone so ignoring it
       return;
     }
@@ -141,4 +141,12 @@ public class DefaultInputListener extends AbstractInputListener {
     }
   }
 
+  @Override
+  public boolean buttonDown(Controller controller, int buttonCode) {
+    if (controllable != null && buttonCode == 0) {
+      controllable.handleKeyPress(KeyEvent.VK_ENTER);
+      return true;
+    }
+    return false;
+  }
 }

@@ -5,6 +5,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.OverlayLayout;
 import javax.swing.Timer;
+import cum.edmund.core.Engine;
 
 /**
  * Component which allows multiple layers to be rendered with transparency
@@ -14,9 +15,9 @@ import javax.swing.Timer;
  */
 public class MultilayeredPanel extends JPanel {
 
-  public MultilayeredPanel() {
+  public MultilayeredPanel(Engine engine) {
     // This will make the screen update every 100 ms
-    new Timer(RedrawTimerTask.ANIMATION_DELAY, new RedrawTimerTask(this)).start();
+    new Timer(RedrawTimerTask.ANIMATION_DELAY, new RedrawTimerTask(this, engine)).start();
 
     setLayout(new OverlayLayout(this));
   }

@@ -60,14 +60,4 @@ public class UI extends JFrame {
     engine.getGamePad().setControllable(controllable);
   }
 
-  public Engine getEngine() {
-    return engine;
-  }
-
-  public WorldMapPanel getWorldMap() {
-    return worldMap;
-  }
-  
-  
-
 }

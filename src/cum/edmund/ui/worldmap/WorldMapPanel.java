@@ -21,6 +21,7 @@ public class WorldMapPanel extends MultilayeredPanel implements Controllable {
   private final PlayerLayer playerLayer;
 
   public WorldMapPanel(UI ui, Engine engine) {
+    super(engine);
     this.view = new View();
 
     playerLayer = new PlayerLayer(view, ui, engine);
