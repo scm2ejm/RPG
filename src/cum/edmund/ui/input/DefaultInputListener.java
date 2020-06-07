@@ -51,8 +51,6 @@ public class DefaultInputListener extends AbstractInputListener {
         return;
       }
 
-      LOGGER.info("Polling");
-
       // Check for controller input
       manager.pollState();
 

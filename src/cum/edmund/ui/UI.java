@@ -32,6 +32,7 @@ public class UI extends JFrame {
 
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setUndecorated(true);
     setVisible(true);
   }
 

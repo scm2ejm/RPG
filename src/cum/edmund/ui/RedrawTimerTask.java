@@ -14,7 +14,7 @@ import cum.edmund.core.Engine;
  */
 public class RedrawTimerTask implements ActionListener {
 
-  public static final int ANIMATION_DELAY = 100;
+  public static final int ANIMATION_DELAY = 75;
 
   private Component component;
   private Engine engine;
