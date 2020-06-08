@@ -45,12 +45,14 @@ public class PlayerLayer extends AbstractLayer implements Controllable {
 
     if (key == KeyEvent.VK_LEFT) {
       outcome = engine.walk(Direction.WEST);
+      setFlipImage(true);
     }
     if (key == KeyEvent.VK_UP) {
       outcome = engine.walk(Direction.NORTH);
     }
     if (key == KeyEvent.VK_RIGHT) {
       outcome = engine.walk(Direction.EAST);
+      setFlipImage(false);
     }
     if (key == KeyEvent.VK_DOWN) {
       outcome = engine.walk(Direction.SOUTH);

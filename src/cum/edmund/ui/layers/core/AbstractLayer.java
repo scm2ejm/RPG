@@ -9,7 +9,6 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import cum.edmund.models.WorldObject;
-import cum.edmund.models.WorldObjectType;
 import cum.edmund.models.maps.world.WorldMap;
 import cum.edmund.ui.View;
 import cum.edmund.ui.utils.GridConverter;
@@ -24,7 +23,8 @@ public abstract class AbstractLayer extends JPanel {
 
   private final View view;
   private final Granularity granularity;
-  private final Map<WorldObjectType, ImageIcon> imageCache;
+  private final Map<String, ImageIcon> imageCache;
+  private boolean flipImage;
 
   /**
    * Height of the panel. We use this to check whether the panel has been resized so we can redraw
@@ -43,6 +43,7 @@ public abstract class AbstractLayer extends JPanel {
     this.view = view;
     this.granularity = granularity;
     this.imageCache = new HashMap<>();
+    this.flipImage = false;
   }
 
   /**
@@ -84,7 +85,7 @@ public abstract class AbstractLayer extends JPanel {
 
         // If the container has been resized then we need to scale image. If not then use cached
         // version
-        ImageIcon icon = imageCache.computeIfAbsent(worldObject.getType(),
+        ImageIcon icon = imageCache.computeIfAbsent(worldObject.getType() + "-" + flipImage,
             (type) -> scaleImage(worldObject.getUnscaledImage()));
 
         // Paint it
@@ -101,8 +102,22 @@ public abstract class AbstractLayer extends JPanel {
     BigDecimal gridSize = BigDecimal.valueOf(View.COARSE_GRID_SIZE);
     BigDecimal newWidth = BigDecimal.valueOf(totalWidth).divide(gridSize, RoundingMode.UP);
     BigDecimal newHeight = BigDecimal.valueOf(totalHeight).divide(gridSize, RoundingMode.UP);
-    return new ImageIcon(unscaledImage.getImage().getScaledInstance(newWidth.intValue(),
-        newHeight.intValue(), Image.SCALE_DEFAULT));
+    if (flipImage) {
+      return new MirrorImageIcon(unscaledImage.getImage().getScaledInstance(newWidth.intValue(),
+          newHeight.intValue(), Image.SCALE_DEFAULT));
+    } else {
+      return new ImageIcon(unscaledImage.getImage().getScaledInstance(newWidth.intValue(),
+          newHeight.intValue(), Image.SCALE_DEFAULT));
+    }
+
+  }
+
+  public boolean isFlipImage() {
+    return flipImage;
+  }
+
+  public void setFlipImage(boolean flipImage) {
+    this.flipImage = flipImage;
   }
 
   /**

@@ -21,8 +21,8 @@ public class HeroTest {
   @Test
   public void testDeath() {
 
-    FightableCharacter hero = new Hero("fucker", 0, 0);
-    FightableCharacter monster = new ButtasaurusAss(0, 1);
+    FightableCharacter hero = new Hero("fucker");
+    FightableCharacter monster = new ButtasaurusAss();
 
     while (true) {
       LOGGER.debug("{} attacks {}", hero.getName(), monster.getName());

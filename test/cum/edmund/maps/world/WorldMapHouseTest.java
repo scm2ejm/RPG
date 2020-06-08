@@ -18,16 +18,16 @@ public class WorldMapHouseTest {
     map.put(0, 0, new Hero("Fucker"));
 
     // Create a test house
-    House house = new House("fucker's house", new Coord(5, 0));
+    House house = new House("fucker's house");
 
     // Place the house on the map
-    map.put(house);
+    map.put(new Coord(5, 0), house);
 
     // Create a test house
-    House crackDen = new House("fucker's crack den", new Coord(69, -69));
+    House crackDen = new House("fucker's crack den");
 
     // Place the crack den on the map
-    map.put(crackDen);
+    map.put(new Coord(69, -69), crackDen);
 
     // Scan map looking for house and crack den
     boolean foundHouse = false;
