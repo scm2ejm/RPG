@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import cum.edmund.models.WorldObject;
-import cum.edmund.models.characters.Character;
 import cum.edmund.models.map.Coord;
 
 /**
@@ -32,8 +31,8 @@ public class WorldMap {
     return objectsByLocation.get(position);
   }
 
-  public Coord get(Character character) {
-    return locationById.get(character.getId());
+  public Coord get(WorldObject worldObject) {
+    return locationById.get(worldObject.getId());
   }
 
   public void put(int x, int y, WorldObject value) {
@@ -49,4 +48,5 @@ public class WorldMap {
     objectsByLocation.put(coord, value);
     locationById.put(value.getId(), coord);
   }
+
 }

@@ -44,6 +44,7 @@ public abstract class AbstractLayer extends JPanel {
     this.granularity = granularity;
     this.imageCache = new HashMap<>();
     this.flipImage = false;
+//    this.setOpaque(false);
   }
 
   /**

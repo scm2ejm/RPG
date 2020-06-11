@@ -14,8 +14,10 @@ import cum.edmund.models.characters.PlayableCharacter;
 import cum.edmund.models.characters.hero.Hero;
 import cum.edmund.models.map.Coord;
 import cum.edmund.models.maps.world.BackgroundWorldMap;
+import cum.edmund.models.maps.world.ForegroundWorldMap;
 import cum.edmund.models.maps.world.WalkOutcome;
 import cum.edmund.models.maps.world.WorldMap;
+import cum.edmund.ui.View;
 import cum.edmund.ui.input.DefaultInputListener;
 
 public class Engine {
@@ -25,7 +27,7 @@ public class Engine {
   private final Hero fucker;
   private final List<PlayableCharacter> entourage;
 
-  private final WorldMap foregroundWorldMap;
+  private final ForegroundWorldMap foregroundWorldMap;
   private final WorldMap characterWorldMap;
   private final WorldMap blockersWorldMap;
   private final WorldMap topBackgroundWorldMap;
@@ -33,19 +35,18 @@ public class Engine {
 
   private final DefaultInputListener gamePad;
 
-  public Engine() {
+  public Engine(View view) {
     fucker = new Hero("fucker");
     entourage = new ArrayList<>();
 
-    foregroundWorldMap = new WorldMap();
+    foregroundWorldMap = new ForegroundWorldMap(view);
     characterWorldMap = new WorldMap();
-    characterWorldMap.put(new Coord(0, 0), fucker);
+    characterWorldMap.put(new Coord(20, 15), fucker);
     blockersWorldMap = new WorldMap();
     topBackgroundWorldMap = new BackgroundWorldMap();
     bottomBackgroundWorldMap = new WorldMap();
 
     this.gamePad = new DefaultInputListener(this);
-
 
     // TODO REMOVE THESE TEST OBJECTS
     for (int i = -3; i <= 5; i++) {
@@ -62,12 +63,18 @@ public class Engine {
       }
     }
 
+    blockersWorldMap.put(new Coord(-5, 1), new Mountain());
+    blockersWorldMap.put(new Coord(-5, -1), new Mountain());
+
+    blockersWorldMap.put(new Coord(-4, 1), new Mountain());
+    blockersWorldMap.put(new Coord(-4, -1), new Mountain());
+
     blockersWorldMap.put(new Coord(3, -4), new Mountain());
     blockersWorldMap.put(new Coord(4, -4), new Mountain());
     blockersWorldMap.put(new Coord(4, -3), new Mountain());
     blockersWorldMap.put(new Coord(4, 4), new Mountain());
     blockersWorldMap.put(new Coord(4, 2), new House("Fuckers house"));
-    blockersWorldMap.put(new Coord(-2, -2), EnemiesHelper.createButtasaurusAss(4));
+    blockersWorldMap.put(new Coord(-2, 0), EnemiesHelper.createButtasaurusAss(4));
   }
 
   /**
@@ -102,7 +109,7 @@ public class Engine {
     return entourage;
   }
 
-  public WorldMap getForegroundWorldMap() {
+  public ForegroundWorldMap getForegroundWorldMap() {
     return foregroundWorldMap;
   }
 

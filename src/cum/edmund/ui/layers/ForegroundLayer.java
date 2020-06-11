@@ -12,18 +12,18 @@ import cum.edmund.ui.layers.core.Granularity;
  * @author Ed
  *
  */
-public class BackgroundLayer extends AbstractLayer {
+public class ForegroundLayer extends AbstractLayer {
 
   private final Engine engine;
 
-  public BackgroundLayer(View view, Engine engine) {
+  public ForegroundLayer(View view, Engine engine) {
     super(view, Granularity.COARSE);
     this.engine = engine;
-//    this.setOpaque(true);
   }
 
   @Override
   protected WorldMap worldMap() {
-    return engine.getTopBackgroundWorldMap();
+    return engine.getForegroundWorldMap();
   }
+
 }

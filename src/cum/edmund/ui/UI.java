@@ -26,8 +26,9 @@ public class UI extends JFrame {
   private UI() {
     super("Return to AssFuck Castle");
 
-    engine = new Engine();
-    worldMap = new WorldMapPanel(this, engine);
+    View view = new View();
+    engine = new Engine(view);
+    worldMap = new WorldMapPanel(this, engine, view);
     createWorldMapView();
 
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);

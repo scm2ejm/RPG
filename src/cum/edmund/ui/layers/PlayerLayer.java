@@ -42,6 +42,13 @@ public class PlayerLayer extends AbstractLayer implements Controllable {
   public void handleKeyPress(int key) {
 
     WalkOutcome outcome = null;
+    if (key == KeyEvent.VK_F) {
+      AudioEngine.playFart();
+    }
+    
+    if (key == KeyEvent.VK_B) {
+      AudioEngine.playBurp();
+    }
 
     if (key == KeyEvent.VK_LEFT) {
       outcome = engine.walk(Direction.WEST);

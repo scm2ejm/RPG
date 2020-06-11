@@ -65,6 +65,11 @@ public class DefaultInputListener extends AbstractInputListener {
       handleInput(2, controller.getAxis(2));
       handleInput(3, controller.getAxis(3));
 
+      // Left and Right triggers
+      handleInput(5, controller.getAxis(5));
+      handleInput(4, controller.getAxis(4));
+
+      
     } catch (SDL_Error e) {
       LOGGER.error("Error capturing gamepad state", e);
     }
@@ -105,6 +110,18 @@ public class DefaultInputListener extends AbstractInputListener {
       // Right stick - Vertical
       controllable.handleKeyPress(value > 0 ? KeyEvent.VK_NUMPAD2 : KeyEvent.VK_NUMPAD8);
     }
+    
+    if (axisCode == 4) {
+      // Left trigger
+      controllable.handleKeyPress(KeyEvent.VK_F);
+    }
+    
+    if (axisCode == 5) {
+      // Right trigger
+      controllable.handleKeyPress(KeyEvent.VK_B);
+    }
+    
+
   }
 
   /**
