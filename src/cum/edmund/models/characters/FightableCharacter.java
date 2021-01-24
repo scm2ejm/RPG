@@ -39,7 +39,8 @@ public abstract class FightableCharacter extends Character {
 
     int oldHp = characterAttributes.getHp();
 
-    int newHp = oldHp -= damage;
+    // Lowest health is zero
+    int newHp = Math.max(oldHp - damage, 0);
 
     characterAttributes.setHp(newHp);
 

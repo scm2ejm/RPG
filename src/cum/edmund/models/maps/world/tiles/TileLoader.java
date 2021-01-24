@@ -41,14 +41,25 @@ public class TileLoader {
 
   public static ImageIcon loadTile(String filename, DrawType drawType) {
     URL url = ClassLoader.getSystemResource(filename);
+    ImageIcon tile = null;
+
     switch (drawType) {
       case STRETCH:
-        return new StretchIcon(url);
+        tile = new StretchIcon(url);
+        break;
       case TILE:
-        return new TileIcon(url);
+        tile = new TileIcon(url);
+        break;
       default:
         throw new RuntimeException("The fuck is a " + drawType + "?");
     }
+
+    // Restart gif from scratch
+    if (filename.toLowerCase().endsWith("gif")) {
+      tile.getImage().flush();
+    }
+
+    return tile;
   }
 
   private static void loadTile(TileType tileType, String filename, DrawType drawType) {

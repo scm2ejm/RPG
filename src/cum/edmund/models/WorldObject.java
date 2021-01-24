@@ -13,8 +13,9 @@ public abstract class WorldObject {
 
   private final UUID id;
   private final String name;
-  private final ImageIcon unscaledImage;
+  protected ImageIcon unscaledImage;
   private WorldObjectType type;
+  private boolean enabled;
 
   /**
    * If true then this object cannot be walked through. Default is false
@@ -29,6 +30,7 @@ public abstract class WorldObject {
 
     // By default this object can be walked through
     this.barrier = false;
+    this.enabled = true;
   }
 
   public WorldObjectType getType() {
@@ -39,8 +41,8 @@ public abstract class WorldObject {
     this.type = type;
   }
 
-  public boolean isBarrier() {
-    return barrier;
+  public boolean barrier() {
+    return enabled && barrier;
   }
 
   public void setBarrier(boolean barrier) {
@@ -57,6 +59,14 @@ public abstract class WorldObject {
 
   public ImageIcon getUnscaledImage() {
     return unscaledImage;
+  }
+
+  public boolean isEnabled() {
+    return enabled;
+  }
+  
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
   }
 
 }

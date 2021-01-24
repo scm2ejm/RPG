@@ -1,6 +1,8 @@
 package cum.edmund.ui.fight.components;
 
 import java.util.Optional;
+import java.util.Timer;
+import java.util.TimerTask;
 import cum.edmund.ui.fight.FightView;
 
 /**
@@ -12,7 +14,7 @@ import cum.edmund.ui.fight.FightView;
 public class AssFuckMenu {
   private final String name;
   private final Runnable task;
-  private final FightView fightView;
+  protected final FightView fightView;
   private String couldPerform;
   private String isPerforming;
   private String hasPerformed;
@@ -45,6 +47,16 @@ public class AssFuckMenu {
   }
 
   public void select() {
+    
+    // Play sound after 1 second
+    Timer soundTimer = new Timer();
+    soundTimer.schedule(new TimerTask() {
+      @Override
+      public void run() {
+        playSound();
+      }
+    }, 1000L);
+    
     task.run();
 
     if (turnOver) {
@@ -80,5 +92,7 @@ public class AssFuckMenu {
     this.turnOver = turnOver;
   }
 
-
+  public void playSound() {
+    // NO-OP
+  }
 }

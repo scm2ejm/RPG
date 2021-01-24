@@ -42,7 +42,7 @@ public class WalkHelper {
       if (adjacentElement != null) {
         adjacentTiles.add(adjacentElement);
 
-        if (adjacentElement.isBarrier()) {
+        if (adjacentElement.barrier()) {
           // This is a tile that we can't walk through
           success = false;
         }

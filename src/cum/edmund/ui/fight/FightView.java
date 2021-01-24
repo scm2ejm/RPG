@@ -20,9 +20,11 @@ import javax.swing.JTextPane;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import cum.edmund.audio.AudioEngine;
 import cum.edmund.core.Engine;
 import cum.edmund.helpers.CombatHelper;
 import cum.edmund.helpers.CombatHelper.CombatOutcome;
+import cum.edmund.models.WorldObject;
 import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.models.characters.enemies.Enemies;
 import cum.edmund.models.characters.enemies.FightableNPC;
@@ -43,10 +45,15 @@ public class FightView extends JPanel {
   private final UI ui;
   private final Engine engine;
   private final List<FightableCharacter> players;
-  private final Enemies enemies;
+  private final List<FightableNPC> enemies;
 
-  private final List<FightableCharacter> allCharacters;
-  private int currentCharacter;
+  private int currentPlayerIndex;
+  private int currentEnemyIndex;
+
+  /**
+   * If true this is the human player's turn. If false it is the non-player characters turn
+   */
+  private boolean playersTurn;
 
   private ActionsPanel actionsPanel;
   private JPanel playerStatsPanel;
@@ -56,22 +63,26 @@ public class FightView extends JPanel {
   private JLabel hp;
   private Timer timer;
   private JPanel holdUpPanel;
+  private WorldObject worldObject;
 
   public FightView(UI ui, Engine engine, Enemies enemies) {
     super(new GridBagLayout());
     this.ui = ui;
     this.engine = engine;
-    this.players = engine.entourageFighters();
-    this.enemies = enemies;
     this.timer = new Timer();
+    this.worldObject = enemies;
 
-    allCharacters = new ArrayList<>();
-    allCharacters.addAll(players);
-    allCharacters.addAll(enemies.getFrontRow());
-    allCharacters.addAll(enemies.getBackRow());
-    Collections.shuffle(allCharacters);
+    this.players = new ArrayList<>(engine.entourageFighters());
+    Collections.shuffle(players);
 
-    currentCharacter = 0;
+    this.enemies = new ArrayList<>();
+    this.enemies.addAll(enemies.getFrontRow());
+    this.enemies.addAll(enemies.getBackRow());
+    Collections.shuffle(this.enemies);
+
+    currentPlayerIndex = 0;
+    currentEnemyIndex = 0;
+    playersTurn = true;
 
     setBackground(Color.GREEN);
     setVisible(true);
@@ -127,8 +138,7 @@ public class FightView extends JPanel {
     enemyStatsText.setBackground(Color.BLACK);
     Font font = new Font(Font.MONOSPACED, 1, 25);
     enemyStatsText.setFont(font);
-    FightableNPC leadEnemy = enemies.getFrontRow().get(0);
-    updateEnemyStats(leadEnemy);
+    updateEnemyStats(currentEnemy());
 
 
 
@@ -343,32 +353,60 @@ public class FightView extends JPanel {
   }
 
   public void scheduleNextTurn() {
-    currentCharacter++;
+    // Move to next player
+    if (playersTurn) {
+      currentPlayerIndex++;
+
+      if (currentPlayerIndex >= players.size()) {
+        currentPlayerIndex = 0;
+      }
+    } else {
+      currentEnemyIndex++;
+
+      if (currentEnemyIndex >= enemies.size()) {
+        currentEnemyIndex = 0;
+      }
+    }
+
+    playersTurn = !playersTurn;
+
     actionsPanel.setVisible(false);
     holdUpPanel.setVisible(true);
-    
-    if (currentCharacter >= allCharacters.size()) {
-      currentCharacter=0;
-    }
-    
+
     timer.schedule(new TimerTask() {
 
       @Override
       public void run() {
+        // Take the next turn
         takeTurn();
+
+        // Close the fight if it's over
+        if (allPlayersDead()) {
+          // TODO: Display FUCK_OFF panel
+        } else if (allEnemiesDead()) {
+          // Yay!
+          AudioEngine.playWinFightMusic();
+          worldObject.setEnabled(false);
+
+          ui.createWorldMapView();
+          AudioEngine.stopBackgroundMusic();
+        }
       }
     }, 3000L);
   }
 
   public void takeTurn() {
-    FightableCharacter character = allCharacters.get(currentCharacter);
+    FightableCharacter character = currentCharacter();
     if (character instanceof FightableNPC) {
       // Perform action
-      CombatOutcome outcome = CombatHelper.physicalAttack(character, players.get(0));
       
+      FightableNPC npc = (FightableNPC) character;
+      npc.attack();
+      CombatOutcome outcome = CombatHelper.physicalAttack(character, players.get(0));
+
       // Update notification pane
       notificationsPane.setText(outcome.toString());
-      
+
       // Move to next turn automatically
       scheduleNextTurn();
     } else {
@@ -377,13 +415,35 @@ public class FightView extends JPanel {
     }
 
     // Update enemy HP
-    FightableNPC leadEnemy = enemies.getFrontRow().get(0);
-    updateEnemyStats(leadEnemy);
+    updateEnemyStats(currentEnemy());
 
     // Update player HP
     populatePlayerHp();
 
-    
+
+  }
+
+  /**
+   * This may be a player or non-player character
+   */
+  public FightableCharacter currentCharacter() {
+    return playersTurn ? currentPlayer() : currentEnemy();
+  }
+
+  public FightableCharacter currentPlayer() {
+    return players.get(currentPlayerIndex);
+  }
+
+  public FightableNPC currentEnemy() {
+    return enemies.get(currentEnemyIndex);
+  }
+
+  public boolean allEnemiesDead() {
+    return enemies.stream().allMatch(a -> a.getCharacterAttributes().getHp() <= 0);
+  }
+
+  public boolean allPlayersDead() {
+    return players.stream().allMatch(a -> a.getCharacterAttributes().getHp() <= 0);
   }
 
 }

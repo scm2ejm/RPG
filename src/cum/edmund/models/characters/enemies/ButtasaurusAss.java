@@ -1,6 +1,9 @@
 package cum.edmund.models.characters.enemies;
 
+import javax.swing.ImageIcon;
 import cum.edmund.models.characters.CharacterAttributes;
+import cum.edmund.models.maps.world.tiles.TileLoader;
+import cum.edmund.models.maps.world.tiles.TileLoader.DrawType;
 
 /**
  * First encountered enemy
@@ -17,6 +20,9 @@ public class ButtasaurusAss extends FightableNPC {
   private static final int DEFAULT_AGILITY = 25;
   private static final int DEFAULT_HP = 69;
   private static final int DEFAULT_MP = 0;
+
+  public static final ImageIcon ATTACK_TILE =
+      TileLoader.loadTile("cat-attack.gif", DrawType.STRETCH);
 
   public ButtasaurusAss() {
     super("Buttasaurus Ass", "cat.gif");
@@ -37,5 +43,15 @@ public class ButtasaurusAss extends FightableNPC {
     characterAttributes.setMaxMp(DEFAULT_MP);
 
     setCharacterAttributes(characterAttributes);
+  }
+
+  @Override
+  public void attack() {
+    this.unscaledImage = ATTACK_TILE;
+  }
+  
+  @Override
+  public ImageIcon attackTile() {
+    return ATTACK_TILE;
   }
 }

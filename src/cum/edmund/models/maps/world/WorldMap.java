@@ -28,7 +28,8 @@ public class WorldMap {
   }
 
   public WorldObject get(Coord position) {
-    return objectsByLocation.get(position);
+    WorldObject worldObject = objectsByLocation.get(position);
+    return worldObject != null && worldObject.isEnabled() ? worldObject : null;
   }
 
   public Coord get(WorldObject worldObject) {

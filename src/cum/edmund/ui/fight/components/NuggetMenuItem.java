@@ -1,7 +1,8 @@
 package cum.edmund.ui.fight.components;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import cum.edmund.audio.AudioEngine;
+import cum.edmund.helpers.CombatHelper;
+import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.ui.fight.FightView;
 
 /**
@@ -11,9 +12,13 @@ import cum.edmund.ui.fight.FightView;
  *
  */
 public class NuggetMenuItem extends AssFuckMenu {
-  private static final Logger LOGGER = LoggerFactory.getLogger(NuggetMenuItem.class);
+
   public NuggetMenuItem(FightView fightView) {
-    super("Butt attack",  () -> LOGGER.error("Nugget"), fightView);
+    super("Butt attack", () -> {
+      FightableCharacter hero = fightView.currentCharacter();
+      FightableCharacter enemy = fightView.currentEnemy();
+      CombatHelper.physicalAttack(hero, enemy);
+    }, fightView);
     setDuration(2800);
     setIconFilename("nugget.gif");
   }
@@ -26,5 +31,10 @@ public class NuggetMenuItem extends AssFuckMenu {
   @Override
   public String hasPerformed() {
     return "Now the enemy smells worse than the hero.";
+  }
+  
+  @Override
+  public void playSound() {
+    AudioEngine.playSoundEffect("fart1.wav");
   }
 }

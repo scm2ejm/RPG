@@ -25,6 +25,8 @@ public class AudioEngine {
   private static final Logger LOGGER = LoggerFactory.getLogger(AudioEngine.class);
 
   private static final String FIGHT_BACKGROUND_FILE = "fight.wav";
+  
+  private static final String WIN_FIGHT_FILE = "win-fight.wav";
 
   private static final List<String> BURP_FILES =
       Arrays.asList("burp1.wav", "burp2.wav", "burp3.wav");
@@ -43,7 +45,7 @@ public class AudioEngine {
     playSoundEffect(BURP_FILES.get(RANDOM.nextInt(BURP_FILES.size())));
   }
 
-  private static void playSoundEffect(String filename) {
+  public static void playSoundEffect(String filename) {
     try {
       Clip soundEffect = stream(filename);
       soundEffect.start();
@@ -95,5 +97,8 @@ public class AudioEngine {
     backgroundMusic.stop();
   }
 
+  public static void playWinFightMusic() {
+    playSoundEffect(WIN_FIGHT_FILE);
+  }
 
 }

@@ -1,5 +1,6 @@
 package cum.edmund.models.characters.enemies;
 
+import javax.swing.ImageIcon;
 import cum.edmund.models.WorldObjectType;
 import cum.edmund.models.characters.FightableCharacter;
 
@@ -17,5 +18,13 @@ public abstract class FightableNPC extends FightableCharacter {
     // Do not allow characters to walk through other characters
     setBarrier(true);
   }
+  
+  public void attack() {
+    // FIXME
+  }
 
+  public ImageIcon attackTile() {
+    // FIXME
+    return null;
+  }
 }

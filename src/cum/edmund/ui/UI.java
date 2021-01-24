@@ -32,7 +32,7 @@ public class UI extends JFrame {
     createWorldMapView();
 
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
-//    setSize(200, 200);
+    //setSize(600, 400);
     
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setUndecorated(true);
