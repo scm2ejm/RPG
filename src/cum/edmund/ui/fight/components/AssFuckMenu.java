@@ -1,6 +1,7 @@
 package cum.edmund.ui.fight.components;
 
 import java.util.Optional;
+import cum.edmund.ui.fight.FightView;
 
 /**
  * Represents a menu. Used by {@link ActionsPanel}
@@ -11,16 +12,22 @@ import java.util.Optional;
 public class AssFuckMenu {
   private final String name;
   private final Runnable task;
+  private final FightView fightView;
   private String couldPerform;
   private String isPerforming;
   private String hasPerformed;
   private String iconFilename;
   private int duration;
+  private boolean turnOver;
 
-  public AssFuckMenu(String name, Runnable task) {
+  public AssFuckMenu(String name, Runnable task, FightView fightView) {
     this.name = name;
     this.task = task;
+    this.fightView = fightView;
     
+    // Assume the turn ends after the first action
+    this.turnOver = true;
+
     // 2.5 seconds by default
     this.duration = 2500;
   }
@@ -28,17 +35,21 @@ public class AssFuckMenu {
   public String couldPerform() {
     return Optional.ofNullable(couldPerform).orElse("Perform " + name + "...");
   }
-  
+
   public String isPerforming() {
     return Optional.ofNullable(isPerforming).orElse("Hero is performing " + name + "...");
   }
-  
+
   public String hasPerformed() {
     return Optional.ofNullable(hasPerformed).orElse("Select an action");
   }
 
   public void select() {
     task.run();
+
+    if (turnOver) {
+      fightView.scheduleNextTurn();
+    }
   }
 
   public String getIconFilename() {
@@ -60,6 +71,14 @@ public class AssFuckMenu {
   public String getName() {
     return name;
   }
-  
+
+  public boolean isTurnOver() {
+    return turnOver;
+  }
+
+  public void setTurnOver(boolean turnOver) {
+    this.turnOver = turnOver;
+  }
+
 
 }

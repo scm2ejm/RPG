@@ -32,6 +32,8 @@ public class UI extends JFrame {
     createWorldMapView();
 
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
+//    setSize(200, 200);
+    
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setUndecorated(true);
     setVisible(true);
@@ -48,6 +50,9 @@ public class UI extends JFrame {
     setVisible(true);
 
     directInputEventsTo(new FightViewKeyboardEventListener(fightView));
+    
+    // Lets do it!
+    fightView.takeTurn();
   }
 
   public void createWorldMapView() {

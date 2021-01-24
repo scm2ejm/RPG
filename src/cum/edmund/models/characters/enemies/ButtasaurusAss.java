@@ -15,7 +15,7 @@ public class ButtasaurusAss extends FightableNPC {
   private static final int DEFAULT_PHYSICAL_DEFENSE = 10;
   private static final int DEFAULT_MAGICAL_DEFENCE = 10;
   private static final int DEFAULT_AGILITY = 25;
-  private static final int DEFAULT_HP = 50;
+  private static final int DEFAULT_HP = 69;
   private static final int DEFAULT_MP = 0;
 
   public ButtasaurusAss() {

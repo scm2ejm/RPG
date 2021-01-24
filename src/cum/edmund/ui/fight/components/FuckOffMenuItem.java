@@ -10,12 +10,12 @@ import cum.edmund.ui.fight.FightView;
  * @author Ed
  *
  */
-public class FuckOffMenuItem extends AssFuckMenu {
+public class FuckOffMenuItem extends UnEndingAssFuckMenu {
   public FuckOffMenuItem(UI ui, FightView fightView) {
     super("Fuck Off", () -> {
       ui.createWorldMapView();
       AudioEngine.stopBackgroundMusic();
-    });
+    }, fightView);
 
     setDuration(0);
   }

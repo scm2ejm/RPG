@@ -74,7 +74,7 @@ public class Engine {
     blockersWorldMap.put(new Coord(4, -3), new Mountain());
     blockersWorldMap.put(new Coord(4, 4), new Mountain());
     blockersWorldMap.put(new Coord(4, 2), new House("Fuckers house"));
-    blockersWorldMap.put(new Coord(-2, 0), EnemiesHelper.createButtasaurusAss(4));
+    blockersWorldMap.put(new Coord(-2, 0), EnemiesHelper.createButtasaurusAss(1));
   }
 
   /**

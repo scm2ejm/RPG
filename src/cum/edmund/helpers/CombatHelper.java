@@ -33,8 +33,9 @@ public class CombatHelper {
     int attack = attackerAttrs.getPhysicalStrength();
     int defense = defenderAttrs.getPhysicalDefense();
 
-    boolean strongAttack = random.nextBoolean();
-    boolean strongDefence = random.nextBoolean();
+    // 10 % chance of a strong attack or strong defence
+    boolean strongAttack = random.nextFloat() > 0.9f;
+    boolean strongDefence = random.nextFloat() > 0.9f;
 
     int attackOffset = (int) (attack * (random.nextFloat() * 0.3f));
     int defenseOffset = (int) (defense * (random.nextFloat() * 0.3f));

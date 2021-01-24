@@ -64,37 +64,37 @@ public class ActionsPanel extends JPanel {
 
   private List<AssFuckMenu> topMenu() {
     List<AssFuckMenu> menu = new ArrayList<>();
-    menu.add(new AssFuckMenu("Attack", () -> renderMenu(attackMenu())));
-    menu.add(new AssFuckMenu("Magic", () -> renderMenu(magicMenu())));
-    menu.add(new AssFuckMenu("Item", () -> renderMenu(itemMenu())));
+    menu.add(new UnEndingAssFuckMenu("Attack", () -> renderMenu(attackMenu()), fightView));
+    menu.add(new UnEndingAssFuckMenu("Magic", () -> renderMenu(magicMenu()), fightView));
+    menu.add(new UnEndingAssFuckMenu("Item", () -> renderMenu(itemMenu()), fightView));
     menu.add(new FuckOffMenuItem(ui, fightView));
     return menu;
   }
 
   private List<AssFuckMenu> attackMenu() {
     List<AssFuckMenu> menu = new ArrayList<>();
-    menu.add(new AssFuckMenu("Butt Attack", () -> LOGGER.error("Butt Attack")));
-    menu.add(new AssFuckMenu("Wiener Attack", () -> LOGGER.error("Wiener Attack")));
-    menu.add(new AssFuckMenu("Heart Attack", () -> LOGGER.error("Heart Attack")));
-    menu.add(new AssFuckMenu("back", () -> renderMenu(topMenu())));
+    menu.add(new NuggetMenuItem(fightView));
+    menu.add(new AssFuckMenu("Wiener Attack", () -> LOGGER.error("Wiener Attack"), fightView));
+    menu.add(new AssFuckMenu("Heart Attack", () -> LOGGER.error("Heart Attack"), fightView));
+    menu.add(new UnEndingAssFuckMenu("back", () -> renderMenu(topMenu()), fightView));
     return menu;
   }
 
   private List<AssFuckMenu> magicMenu() {
     List<AssFuckMenu> menu = new ArrayList<>();
-    menu.add(new AssFuckMenu("Plasma Jizz", () -> LOGGER.error("Plasma Jizz")));
-    menu.add(new AssFuckMenu("Yellow Snow", () -> LOGGER.error("Yellow Snow")));
-    menu.add(new CockRocketMenuItem());
-    menu.add(new ExplosivoDiarrheaMenuItem());
-    menu.add(new AssFuckMenu("back", () -> renderMenu(topMenu())));
+    menu.add(new AssFuckMenu("Plasma Jizz", () -> LOGGER.error("Plasma Jizz"), fightView));
+    menu.add(new AssFuckMenu("Yellow Snow", () -> LOGGER.error("Yellow Snow"), fightView));
+    menu.add(new CockRocketMenuItem(fightView));
+    menu.add(new ExplosivoDiarrheaMenuItem(fightView));
+    menu.add(new UnEndingAssFuckMenu("back", () -> renderMenu(topMenu()), fightView));
     return menu;
   }
 
   private List<AssFuckMenu> itemMenu() {
     List<AssFuckMenu> menu = new ArrayList<>();
-    menu.add(new AssFuckMenu("Mints", () -> LOGGER.error("Mints")));
-    menu.add(new AssFuckMenu("TP", () -> LOGGER.error("TP")));
-    menu.add(new AssFuckMenu("back", () -> renderMenu(topMenu())));
+    menu.add(new AssFuckMenu("Mints", () -> LOGGER.error("Mints"), fightView));
+    menu.add(new AssFuckMenu("TP", () -> LOGGER.error("TP"), fightView));
+    menu.add(new UnEndingAssFuckMenu("back", () -> renderMenu(topMenu()), fightView));
     return menu;
   }
 

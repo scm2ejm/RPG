@@ -9,6 +9,9 @@ import java.awt.GridBagLayout;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.Timer;
+import java.util.TimerTask;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -18,13 +21,23 @@ import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import cum.edmund.core.Engine;
+import cum.edmund.helpers.CombatHelper;
+import cum.edmund.helpers.CombatHelper.CombatOutcome;
 import cum.edmund.models.characters.FightableCharacter;
 import cum.edmund.models.characters.enemies.Enemies;
+import cum.edmund.models.characters.enemies.FightableNPC;
 import cum.edmund.models.maps.world.tiles.TileLoader;
 import cum.edmund.models.maps.world.tiles.TileLoader.DrawType;
 import cum.edmund.ui.UI;
 import cum.edmund.ui.fight.components.ActionsPanel;
 
+/**
+ * This is the screen displayed when fighting, consisting of the player and enemy images and the
+ * panel of actions
+ * 
+ * @author Ed
+ *
+ */
 public class FightView extends JPanel {
 
   private final UI ui;
@@ -39,6 +52,10 @@ public class FightView extends JPanel {
   private JPanel playerStatsPanel;
   private JLabel playerImageLabel;
   private JTextPane notificationsPane;
+  private JTextPane enemyStatsText;
+  private JLabel hp;
+  private Timer timer;
+  private JPanel holdUpPanel;
 
   public FightView(UI ui, Engine engine, Enemies enemies) {
     super(new GridBagLayout());
@@ -46,6 +63,7 @@ public class FightView extends JPanel {
     this.engine = engine;
     this.players = engine.entourageFighters();
     this.enemies = enemies;
+    this.timer = new Timer();
 
     allCharacters = new ArrayList<>();
     allCharacters.addAll(players);
@@ -64,6 +82,8 @@ public class FightView extends JPanel {
     setupEnemyStatsText();
 
     setupPlayerStatsPanel();
+
+    setupHoldUpPanel();
 
     setupActionsPanel();
 
@@ -90,10 +110,6 @@ public class FightView extends JPanel {
     notificationsPane.setFont(font);
     notificationsPane.setText("Waiting for action...");
 
-    FontMetrics fontMetrics = notificationsPane.getFontMetrics(font);
-
-    int width = fontMetrics.stringWidth(notificationsPane.getText());
-
     add(notificationsPane, c);
   }
 
@@ -106,18 +122,34 @@ public class FightView extends JPanel {
     c.weighty = 1;
     c.anchor = GridBagConstraints.FIRST_LINE_END;
 
-    JTextPane enemyStatsText = new JTextPane();
+    enemyStatsText = new JTextPane();
     enemyStatsText.setForeground(Color.WHITE);
     enemyStatsText.setBackground(Color.BLACK);
     Font font = new Font(Font.MONOSPACED, 1, 25);
     enemyStatsText.setFont(font);
-    enemyStatsText.setText("BUTTASAURUS ASS\t69HP\t69MP");
+    FightableNPC leadEnemy = enemies.getFrontRow().get(0);
+    updateEnemyStats(leadEnemy);
+
+
 
     FontMetrics fontMetrics = enemyStatsText.getFontMetrics(font);
 
     int width = fontMetrics.stringWidth(enemyStatsText.getText());
 
     add(enemyStatsText, c);
+  }
+
+  /**
+   * Display something like "BUTTASAURUS ASS\t69HP\t69MP"
+   * 
+   * @param enemy Enemy to display stats of
+   */
+  private void updateEnemyStats(FightableNPC enemy) {
+    StringJoiner stats = new StringJoiner("\t");
+    stats.add(enemy.getName().toUpperCase());
+    stats.add(String.valueOf(enemy.getCharacterAttributes().getHp()) + "HP");
+    stats.add(String.valueOf(enemy.getCharacterAttributes().getMp()) + "MP");
+    enemyStatsText.setText(stats.toString());
   }
 
   public void setupPlayerImagePanel() {
@@ -217,11 +249,11 @@ public class FightView extends JPanel {
       c.weightx = 1;
       c.weighty = 1;
 
-      JLabel hp = new JLabel(player.getCharacterAttributes().getHp() + "/"
-          + player.getCharacterAttributes().getMaxHp() + " HP");
+      hp = new JLabel();
       hp.setForeground(Color.WHITE);
       hp.setAlignmentX(Component.CENTER_ALIGNMENT);
       hp.setAlignmentY(Component.TOP_ALIGNMENT);
+      populatePlayerHp();
       playerStatsPanel.add(hp, c);
 
       // MP
@@ -242,6 +274,12 @@ public class FightView extends JPanel {
     }
   }
 
+  private void populatePlayerHp() {
+    FightableCharacter player = players.get(0);
+    hp.setText(player.getCharacterAttributes().getHp() + "/"
+        + player.getCharacterAttributes().getMaxHp() + " HP");
+  }
+
   private void setupActionsPanel() {
     actionsPanel = new ActionsPanel(ui, engine, this);
 
@@ -254,6 +292,42 @@ public class FightView extends JPanel {
     c.anchor = GridBagConstraints.LAST_LINE_END;
 
     add(actionsPanel, c);
+
+    actionsPanel.setVisible(false);
+  }
+
+  private void setupHoldUpPanel() {
+    Border border = BorderFactory.createLineBorder(Color.WHITE, 5, true);
+    Border margin = new EmptyBorder(5, 5, 5, 5);
+    Border withOuterMargin = new CompoundBorder(margin, border);
+    Border withInnerMargin = new CompoundBorder(withOuterMargin, margin);
+
+    holdUpPanel = new JPanel();
+    holdUpPanel.setBackground(Color.BLUE);
+    holdUpPanel.setBorder(withInnerMargin);
+    holdUpPanel.setLayout(new GridBagLayout());
+
+    JLabel label = new JLabel("One moment please!");
+    label.setForeground(Color.RED);
+    label.setAlignmentX(Component.CENTER_ALIGNMENT);
+    label.setAlignmentY(Component.CENTER_ALIGNMENT);
+
+    GridBagConstraints centre = new GridBagConstraints();
+    centre.fill = GridBagConstraints.BOTH;
+    centre.anchor = GridBagConstraints.CENTER;
+
+    holdUpPanel.add(label, centre);
+
+
+    GridBagConstraints c = new GridBagConstraints();
+    c.fill = GridBagConstraints.BOTH;
+    c.gridx = 1;
+    c.gridy = 3;
+    c.weightx = 0.9;
+    c.weighty = 0.5;
+    c.anchor = GridBagConstraints.LAST_LINE_END;
+
+    add(holdUpPanel, c);
   }
 
   public ActionsPanel getActionsPanel() {
@@ -266,6 +340,50 @@ public class FightView extends JPanel {
 
   public void showText(String text) {
     notificationsPane.setText(text);
+  }
+
+  public void scheduleNextTurn() {
+    currentCharacter++;
+    actionsPanel.setVisible(false);
+    holdUpPanel.setVisible(true);
+    
+    if (currentCharacter >= allCharacters.size()) {
+      currentCharacter=0;
+    }
+    
+    timer.schedule(new TimerTask() {
+
+      @Override
+      public void run() {
+        takeTurn();
+      }
+    }, 3000L);
+  }
+
+  public void takeTurn() {
+    FightableCharacter character = allCharacters.get(currentCharacter);
+    if (character instanceof FightableNPC) {
+      // Perform action
+      CombatOutcome outcome = CombatHelper.physicalAttack(character, players.get(0));
+      
+      // Update notification pane
+      notificationsPane.setText(outcome.toString());
+      
+      // Move to next turn automatically
+      scheduleNextTurn();
+    } else {
+      actionsPanel.setVisible(true);
+      holdUpPanel.setVisible(false);
+    }
+
+    // Update enemy HP
+    FightableNPC leadEnemy = enemies.getFrontRow().get(0);
+    updateEnemyStats(leadEnemy);
+
+    // Update player HP
+    populatePlayerHp();
+
+    
   }
 
 }

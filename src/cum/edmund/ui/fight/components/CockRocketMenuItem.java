@@ -2,6 +2,7 @@ package cum.edmund.ui.fight.components;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import cum.edmund.ui.fight.FightView;
 
 /**
  * Behaviour relating to the attack menu
@@ -13,8 +14,8 @@ public class CockRocketMenuItem extends AssFuckMenu {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CockRocketMenuItem.class);
 
-  public CockRocketMenuItem() {
-    super("Mikey's Cock Rocket", () -> LOGGER.error("Mikey's Cock Rocket"));
+  public CockRocketMenuItem(FightView fightView) {
+    super("Mikey's Cock Rocket", () -> LOGGER.error("Mikey's Cock Rocket"), fightView);
     setDuration(2500);
     setIconFilename("cockrocket.gif");
   }
