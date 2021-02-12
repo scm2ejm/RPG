@@ -2,6 +2,8 @@ package cum.edmund.models;
 
 import java.util.UUID;
 import javax.swing.ImageIcon;
+import cum.edmund.models.maps.world.tiles.TileLoader;
+import cum.edmund.models.maps.world.tiles.TileLoader.DrawType;
 
 /**
  * A world object is something that the hero can interact with
@@ -13,7 +15,8 @@ public abstract class WorldObject {
 
   private final UUID id;
   private final String name;
-  protected ImageIcon unscaledImage;
+  private final ImageIcon unscaledImage;
+  private final ImageIcon scaledImage;
   private WorldObjectType type;
   private boolean enabled;
 
@@ -27,6 +30,7 @@ public abstract class WorldObject {
     this.name = name;
     this.type = type;
     this.unscaledImage = new ImageIcon(ClassLoader.getSystemResource(filename));
+    this.scaledImage = TileLoader.loadTile(filename, DrawType.STRETCH);
 
     // By default this object can be walked through
     this.barrier = false;
@@ -59,6 +63,10 @@ public abstract class WorldObject {
 
   public ImageIcon getUnscaledImage() {
     return unscaledImage;
+  }
+  
+  public ImageIcon getScaledImage() {
+    return scaledImage;
   }
 
   public boolean isEnabled() {

@@ -18,13 +18,14 @@ public abstract class FightableNPC extends FightableCharacter {
     // Do not allow characters to walk through other characters
     setBarrier(true);
   }
-  
-  public void attack() {
-    // FIXME
-  }
 
   public ImageIcon attackTile() {
     // FIXME
+    return null;
+  }
+
+  public String attackSound() {
+    // TODO Auto-generated method stub
     return null;
   }
 }

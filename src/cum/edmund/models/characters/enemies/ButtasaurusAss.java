@@ -21,9 +21,11 @@ public class ButtasaurusAss extends FightableNPC {
   private static final int DEFAULT_HP = 69;
   private static final int DEFAULT_MP = 0;
 
-  public static final ImageIcon ATTACK_TILE =
+  private static final ImageIcon ATTACK_TILE =
       TileLoader.loadTile("cat-attack.gif", DrawType.STRETCH);
 
+  private static final String ATTACK_SOUND = "cat-attack.wav";
+  
   public ButtasaurusAss() {
     super("Buttasaurus Ass", "cat.gif");
   }
@@ -46,12 +48,12 @@ public class ButtasaurusAss extends FightableNPC {
   }
 
   @Override
-  public void attack() {
-    this.unscaledImage = ATTACK_TILE;
+  public ImageIcon attackTile() {
+    return ATTACK_TILE;
   }
   
   @Override
-  public ImageIcon attackTile() {
-    return ATTACK_TILE;
+  public String attackSound() {
+    return ATTACK_SOUND;
   }
 }

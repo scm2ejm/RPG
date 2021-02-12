@@ -12,6 +12,8 @@ import cum.edmund.ui.input.Controllable;
  */
 public class FightViewKeyboardEventListener implements Controllable {
 
+  private static boolean enabled = true;
+  
   private FightView fightView;
 
   public FightViewKeyboardEventListener(FightView fightView) {
@@ -20,6 +22,10 @@ public class FightViewKeyboardEventListener implements Controllable {
 
   @Override
   public void handleKeyPress(int key) {
+    if (!enabled) {
+      return;
+    }
+    
     if (key == KeyEvent.VK_UP) {
       fightView.getActionsPanel().upPressed();
     } else if (key == KeyEvent.VK_DOWN) {
@@ -34,4 +40,11 @@ public class FightViewKeyboardEventListener implements Controllable {
     return fightView;
   }
 
+  public void enable() {
+    enabled = true;
+  }
+  
+  public void disable() {
+    enabled = false;
+  }
 }

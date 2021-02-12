@@ -69,9 +69,9 @@ public class TileLoader {
   public static ImageIcon getNewPlayerTile() {
     return new StretchIcon(ClassLoader.getSystemResource("walk.gif"));
   }
-
-  public static ImageIcon getNewEnemyTile() {
-    return new StretchIcon(ClassLoader.getSystemResource("cat.gif"));
+  
+  public static ImageIcon ahFuckTile() {
+    return new StretchIcon(ClassLoader.getSystemResource("ah-fuck.gif"));
   }
 
   public static ImageIcon getTile(TileType type, ImageObserver observer) {

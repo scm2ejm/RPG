@@ -40,7 +40,7 @@ import cum.edmund.ui.fight.components.ActionsPanel;
  * @author Ed
  *
  */
-public class FightView extends JPanel {
+public class AhFuck extends JPanel {
 
   private final UI ui;
   private final Engine engine;
@@ -66,7 +66,7 @@ public class FightView extends JPanel {
   private JPanel holdUpPanel;
   private WorldObject worldObject;
 
-  public FightView(UI ui, Engine engine, Enemies enemies) {
+  public AhFuck(UI ui, Engine engine, Enemies enemies) {
     super(new GridBagLayout());
     this.ui = ui;
     this.engine = engine;
