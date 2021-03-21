@@ -382,6 +382,9 @@ public class FightView extends JPanel {
     actionsPanel.setVisible(false);
     holdUpPanel.setVisible(true);
 
+    // Define new var so it can be referenced from TimerTask
+    FightView localFightView = this;
+    
     timer.schedule(new TimerTask() {
 
       @Override
@@ -395,7 +398,16 @@ public class FightView extends JPanel {
 
         // Close the fight if it's over
         if (allPlayersDead()) {
-          // TODO: Display FUCK_OFF panel
+          localFightView.removeAll();
+          localFightView.add(new AhFuck(localFightView));
+
+//          // TODO: REMOVE ME!!!!!!!!!!!!
+//          try {
+//            Thread.sleep(3000L);
+//          } catch (InterruptedException e) {
+//            // TODO Auto-generated catch block
+//            e.printStackTrace();
+//          }
         } else if (allEnemiesDead()) {
           // Yay!
           AudioEngine.playWinFightMusic();

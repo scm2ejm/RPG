@@ -46,6 +46,9 @@ public class CombatHelper {
       attack -= attackOffset;
     }
 
+    // DONT COMMIT ME
+//    attack += 50;
+    
     if (strongDefence) {
       defense += defenseOffset;
     } else {
